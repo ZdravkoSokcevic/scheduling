@@ -11,5 +11,5 @@ app.use(bodyParser());
 app.use('/user',UserRouter);
 
 
-
-app.listen(process.env.APP_PORT|3000,process.env.APP_HOST);
+// console.log(process.env);
+app.listen(process.env.APP_PORT,process.env.APP_HOST);

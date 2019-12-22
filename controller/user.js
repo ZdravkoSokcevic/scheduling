@@ -1,21 +1,29 @@
-const conn= require('../model/database');
+// const conn= require('../model/database');
 const UserModel= require('../model/user');
 
-// let UserController= {
-//   all: (req,res)=> {
-//     return new Promise((res,rej)=> {
-//       UserModel.all().then(result=> {
-//         res.statusCode=200;
-//         res.end(JSON.stringify(result));
-//       });
-//     });
-//   }
-// }
 
 exports.allUsers= (req,res)=> {
   UserModel.all().then(result=> {
     res.statusCode=200;
+    result.forEach(element => {
+      delete element.password;
+      delete element.access_token;
+      delete element.remember_token;
+    });
     res.end(JSON.stringify(result));
+  });
+}
+
+exports.insert= (req,res)=> {
+  let data= req.body;
+  UserModel.insert(data).then(response=> {
+    if(!response) {
+      res.statusCode=404;
+      res.end(JSON.stringify('Error'));
+    }else {
+      res.statusCode=200;
+      res.end(JSON.stringify({message:'success'}));
+    }
   });
 }
 

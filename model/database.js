@@ -1,4 +1,6 @@
 const mysql= require('mysql');
+const env= require('custom-env').env();
+
 let connString={
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -6,11 +8,12 @@ let connString={
   database: process.env.DB_NAME
 }
 
+
 let connection= mysql.createConnection(connString);
 
-// connection.connect(err=> {
-//   if(err) throw err;
-//   console.log("Connected to db");
-// });
+connection.connect(err=> {
+  if(err) throw err;
+  console.log("Connected to db");
+});
 
 module.exports= connection;
