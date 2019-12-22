@@ -19,5 +19,4 @@ exports.allUsers= (req,res)=> {
   });
 }
 
-
 // module.exports= UserController;
