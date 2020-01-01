@@ -27,4 +27,37 @@ exports.insert= (req,res)=> {
   });
 }
 
+exports.update= (req,res)=> {
+  let data= req.body;
+  UserModel.update(data).then(response=> {
+    if(!response) {
+      res.statusCode= 404;
+      res.end(JSON.stringify({message:'not found'}));
+    }else {
+      res.statusCode= 200;
+      res.end(JSON.stringify({message:'success'}));
+    }
+  });
+}
+
+exports.delete= (req,res)=> {
+  id= req.params.id;
+  UserModel.findById(id).then(result=> {
+    if(result==null) {
+      res.statusCode= 404;
+      res.end(JSON.stringify('Not found'));
+    }else {
+      UserModel.delete(id).then(success=> {
+        if(!success) {
+			res.statusCode= 404;
+			res.end(JSON.stringify({message:'Not found'}));
+        }else {
+			res.statusCode= 200;
+			res.end(JSON.stringify({message:'Success'}));
+        }
+      });
+    }
+  })
+}
+
 // module.exports= UserController;

@@ -4,16 +4,13 @@ let conn= require('../model/database');
 const UserController= require('../controller/user');
 
 router.get('/',(req,res)=> {
-  res.end('/user si dosao');
+	res.end('/user si dosao');
 });
 
 
 router.post('/insert',UserController.insert);
-
-// router.get('/all',(req,res)=> {
-//   res.end(JSON.stringify("Okej"));
-// });
 router.get('/all',UserController.allUsers);
-
+router.post('/patch',UserController.update);
+router.delete('/:id',UserController.delete);
 
 module.exports= router;
