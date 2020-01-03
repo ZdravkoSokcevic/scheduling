@@ -10,12 +10,17 @@ exports.allUsers= (req,res)=> {
       delete element.access_token;
       delete element.remember_token;
     });
+    res.statusCode= 200;
+    res.header({'Content-Type':'application/json'});
     res.end(JSON.stringify(result));
   });
 }
 
 exports.insert= (req,res)=> {
   let data= req.body;
+  if(data.role===null) {
+    data.role='user';
+  } 
   UserModel.insert(data).then(response=> {
     if(!response) {
       res.statusCode=404;
@@ -41,7 +46,7 @@ exports.update= (req,res)=> {
 }
 
 exports.delete= (req,res)=> {
-  id= req.params.id;
+  let id= req.params.id;
   UserModel.findById(id).then(result=> {
     if(result==null) {
       res.statusCode= 404;
@@ -58,6 +63,24 @@ exports.delete= (req,res)=> {
       });
     }
   })
+}
+
+exports.loadById= (req,res)=> {
+  let id= req.params.id;
+  UserModel.findById(id).then(user=> {
+    res.header({'Content-Type':'application/json'});
+    if(user==null) {
+      res.statusCode= 200;
+      let data={};
+      res.end(JSON.stringify({data}));
+    }else {
+      res.statusCode= 200;
+      delete user.password;
+      delete user.access_token;
+      delete user.remember_token;
+      res.end(JSON.stringify(user));
+    }
+  });
 }
 
 // module.exports= UserController;

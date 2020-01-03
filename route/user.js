@@ -8,9 +8,10 @@ router.get('/',(req,res)=> {
 });
 
 
-router.post('/insert',UserController.insert);
-router.get('/all',UserController.allUsers);
-router.post('/patch',UserController.update);
-router.delete('/:id',UserController.delete);
+router.post('/insert', UserController.insert);
+router.get('/all', UserController.allUsers);
+router.post('/patch', UserController.update);
+router.get('/:id', UserController.loadById);
+router.delete('/:id', UserController.delete);
 
 module.exports= router;

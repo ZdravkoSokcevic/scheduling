@@ -7,8 +7,8 @@
 6 silly lifecycle @~prestart: no script for prestart, continuing
 7 info lifecycle @~start: @
 8 verbose lifecycle @~start: unsafe-perm in lifecycle true
-9 verbose lifecycle @~start: PATH: /usr/share/npm/bin/node-gyp-bin:/home/miral/Projects/ZakazivanjeTermina/node_modules/.bin:/home/miral/.local/bin:/home/miral/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/miral/.dotnet/tools
-10 verbose lifecycle @~start: CWD: /home/miral/Projects/ZakazivanjeTermina
+9 verbose lifecycle @~start: PATH: /usr/share/npm/bin/node-gyp-bin:/home/zdravko/Projects/scheduling/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+10 verbose lifecycle @~start: CWD: /home/zdravko/Projects/scheduling
 11 silly lifecycle @~start: Args: [ '-c', 'node  index.js' ]
 12 silly lifecycle @~start: Returned: code: 1  signal: null
 13 info lifecycle @~start: Failed to exec start script
@@ -23,8 +23,8 @@
 14 verbose stack     at maybeClose (internal/child_process.js:925:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
 15 verbose pkgid @
-16 verbose cwd /home/miral/Projects/ZakazivanjeTermina
-17 error Linux 5.0.0-37-generic
+16 verbose cwd /home/zdravko/Projects/scheduling
+17 error Linux 4.15.0-71-generic
 18 error argv "/usr/bin/node" "/usr/bin/npm" "start"
 19 error node v8.10.0
 20 error npm  v3.5.2
