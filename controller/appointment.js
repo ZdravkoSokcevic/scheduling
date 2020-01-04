@@ -1,4 +1,7 @@
 const Appointment= require('../model/appointment');
+const User= require('../model/user');
+const Room= require('../model/room');
+const response= require('../controller/response');
 
 exports.all= (req,res)=> {
     Appointment.all().then(results=> {
@@ -18,17 +21,15 @@ exports.insert= (req,res)=> {
         if(data.date_to!==null) {
             data.date_to= new Date(data.date_to);
         }
-        console.log('Date from poslije'+data.date_from);
-        console.log('Date_to poslije'+data.date_to);
         Appointment.insert(data).then((resolve,reject)=> {
             if(reject) {
-                res.statusCode= 500;
-                res.end(JSON.stringify({message:'Cannot insert'}));
+                response.unprocessed(res);
             }else {
-                res.statusCode= 200;
-                res.end(JSON.stringify({message:'success'}));
+                response.ok(res);
             }
         });
+    }else {
+        response.notFound(res);
     }
 }
 
@@ -36,16 +37,13 @@ exports.delete= (req,res)=> {
     let id= req.params.id;
     res.header({'Content-Type':'application/json'});
     if(id==null) {
-        res.statusCode= 404;
-        res.end(JSON.stringify({message:'not found'}));
+        response.notFound(res);
     }else {
         Appointment.delete(id).then(done=> {
             if(!done) {
-                res.statusCode= 404;
-                res.end(JSON.stringify({message:'failed'}));
+                response.notFound(res);
             }else {
-                res.statusCode= 200;
-                res.end(JSON.stringify({message:'success'}));
+                response.ok(res);
             }
         });
     }
@@ -57,3 +55,43 @@ exports.loadById= (req,res)=> {
         
     });
 }
+
+
+exports.request= (req,res)=> {
+    let data= req.body;
+    if(!('dentist_id' in data) || !('patient_id' in data) || !('room_id' in data) ) {
+        response.notFound(res);
+    }else {
+        User.findById(data.dentist_id).then(dentist=> {
+            if(dentist==null) {
+                response.notFound(res);
+            }else {
+                if(dentist.role!=='doctor') {
+                    response.notFound(res);
+                }else {
+                    User.findById(data.patient_id).then(patient=> {
+                        if(patient.role!=='user') {
+                            response.notFound(res);   
+                        }else {
+                            Room.findById(data.room_id).then(room=> {
+                                if(room==null) {
+                                    response.notFound(res);
+                                }else {
+                                    Appointment.insert(data).then(done=> {
+                                        if(done==null) {
+                                            response.notFound(res); 
+                                        }else {
+                                            response.ok(res);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        })
+    }
+    User.findById()
+}
+

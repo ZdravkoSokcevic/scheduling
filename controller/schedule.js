@@ -1,4 +1,5 @@
 const Schedule= require('../model/schedule');
+const response= require('./response');
 
 exports.all= (req,res)=> {
     Schedule.all().then(results=> {
@@ -7,9 +8,9 @@ exports.all= (req,res)=> {
             res.header({'Content-Type':'application/json'});
             res.end(JSON.stringify(results));
         }else {
-            res.statusCode= 500;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'Failed to fetch'}));
+            response.setHeaders(res);
+            let data=[];
+            res.end(JSON.stringify(data));
         }
     });
 }
@@ -18,13 +19,9 @@ exports.insert= (req,res)=> {
     data=req.body;
     Schedule.insert(data).then(resolve=> {
         if(resolve) {
-            res.statusCode= 200;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'success'}));
+            response.ok(res);
         }else {
-            res.statusCode= 404;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'Failed'}));
+            response.notFound(res);
         }
     })
 }
@@ -33,13 +30,9 @@ exports.delete= (req,res)=> {
     let id= req.params.id;
     Schedule.destroy(id).then(resolve=> {
         if(resolve) {
-            res.statusCode= 200;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'success'}));
+            res.ok(res);
         }else {
-            res.statusCode= 404;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'failed'}));
+            res.notFound(res);
         }
     });
 }

@@ -1,4 +1,5 @@
 const Room= require('../model/room');
+const response= require('./response');
 
 
 exports.all= (req,res)=> {
@@ -13,13 +14,9 @@ exports.store= (req,res)=> {
     Room.insert(data)
         .then((resolved,rejected)=> {
             if(rejected) {
-                res.statusCode= 404;
-                res.header({'Content-Type':'application/json'});
-                res.end(JSON.stringify({message:'Not found'}));
+                response.notFound(res);
             }else {
-                res.statusCode= 200;
-                res.header({'Content-Type':'application/json'});
-                res.end(JSON.stringify({message:'Success'}));
+                response.ok(res);
             }
         });
 }
@@ -28,13 +25,9 @@ exports.delete= (req,res)=> {
     let id= req.params.id;
     Room.destroy(id).then((resolve,reject)=> {
         if(reject) {
-            res.statusCode= 404;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'failed'}));
+            response.notFound(res);
         }else {
-            res.statusCode= 200;
-            res.header({'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'success'}));
+            response.ok(res);
         }
     });
 }

@@ -71,6 +71,62 @@ let UserModel = {
                 }
             });
         })
+    },
+    loadScheduleById: id=> {
+        return new Promise((res,rej)=> {
+            let query= `
+                SELECT 
+                    a.*,
+                    r.room_name as room_name,
+                    r.id as room_id
+                FROM users u
+                LEFT JOIN appointments a
+                ON u.id= a.dentist_id
+                LEFT JOIN room r
+                ON a.room_id= r.id
+                WHERE u.id=?
+            `;
+            conn.query(query,id,(err,results)=> {
+                if(err) throw new Error();
+                else res(results);
+            });
+        });
+    },
+    find:(column,value)=> {
+        return new Promise((res,rej)=> {
+            if(column==undefined || value==undefined)
+                rej('Data is undefined');
+            else {
+                let query=`
+                    SELECT * 
+                    FROM users
+                    WHERE ${column}=?
+                `;
+                // console.log(column,value);
+                conn.query(query,value,(error,results)=> {
+                    console.log(results);
+                    if(error || results==[]) {
+                        throw new Error('Cannot read');
+                        rej('Cannot read');
+                    }else {
+                        res(results);
+                    }
+                });
+            }
+        });
+    },
+    findOne:(column,value)=> {
+        return new Promise((res,rej)=> {
+            if(column==undefined || value==undefined)
+                rej('Data is undefined');
+            else {
+                UserModel.find(column,value).then((value)=> {
+                    res(value[0]);
+                }).catch(rejected=> {
+                    rej(rejected);
+                });
+            }
+        });
     }
 }
 module.exports = UserModel;

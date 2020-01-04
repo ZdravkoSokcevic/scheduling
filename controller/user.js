@@ -1,5 +1,6 @@
 // const conn= require('../model/database');
 const UserModel= require('../model/user');
+const auth= require('./auth');
 
 
 exports.allUsers= (req,res)=> {
@@ -81,6 +82,39 @@ exports.loadById= (req,res)=> {
       res.end(JSON.stringify(user));
     }
   });
+}
+
+/**
+ * Doctor only
+ */
+exports.schedule= (req,res)=> {
+  id= req.params.id;
+  res.header({'Content-Type':'application/json'});
+  if(id==null) {
+    res.statusCode= 404;
+    res.end(JSON.stringify({message:'not found'}));
+  }else {
+    UserModel.findById(id).then(result=> {
+      if(result==null) {
+        res.statusCode= 404;
+        res.end(JSON.stringify({message:'not found'}));
+      }else {
+        UserModel.loadScheduleById(id).then(results=> {
+          if(results!==null) {
+            res.statusCode= 200;
+            res.end(JSON.stringify(results));
+          }else {
+            res.statusCode= 404;
+            res.end(JSON.stringify({message:'failed'}));
+          }
+        }); 
+      }
+    });
+  }   
+}
+
+let loggedInUser= (req,res)=> {
+  return auth.getLoggedIn();
 }
 
 // module.exports= UserController;
