@@ -7,6 +7,8 @@ exports.notFound= res=> {
 
 exports.unauthorized= res=> {
     this.setHeaders(res);
+    res.statusCode= 401;
+    res.end(JSON.stringify({message:'unauthorized'}));
 }
 
 exports.unprocessed= res=> {

@@ -1,5 +1,6 @@
 // const conn= require('../model/database');
 const UserModel= require('../model/user');
+const response= require('./response');
 const auth= require('./auth');
 
 
@@ -35,14 +36,30 @@ exports.insert= (req,res)=> {
 
 exports.update= (req,res)=> {
   let data= req.body;
-  UserModel.update(data).then(response=> {
-    if(!response) {
-      res.statusCode= 404;
-      res.end(JSON.stringify({message:'not found'}));
-    }else {
-      res.statusCode= 200;
-      res.end(JSON.stringify({message:'success'}));
+  let id= req.params.id;
+  UserModel.findById(id).then(user=> {
+    for(let x in user) {
+      if(!(x in data)) {
+        data[x]= user[x]; 
+      }
     }
+    auth.admin(user=> {
+      if(!user) {
+        data.role= user.role;
+      }
+    })
+    console.log(`Data: ${JSON.stringify(data)}`)
+    UserModel.update(data).then(response=> {
+      if(!response) {
+        res.statusCode= 404;
+        res.end(JSON.stringify({message:'not found'}));
+      }else {
+        res.statusCode= 200;
+        res.end(JSON.stringify({message:'success'}));
+      }
+    });
+  }).catch(err=> {
+    response.notFound(res);
   });
 }
 

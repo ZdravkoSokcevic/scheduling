@@ -31,8 +31,8 @@ let UserModel = {
     },
     update: data => {
         return new Promise((res, rej) => {
-            let query = "UPDATE users SET first_name=?,last_name=?,username=?,email=? WHERE id=?";
-            conn.query(query, [data.first_name, data.last_name, data.username, data.email, data.id], (err, result) => {
+            let query = "UPDATE users SET first_name=?,last_name=?,username=?,email=?,role=? WHERE id=?";
+            conn.query(query, [data.first_name, data.last_name, data.username, data.email, data.role, data.id], (err, result) => {
                 if (err) {
                     throw err;
                     res(false);
