@@ -21,15 +21,16 @@ exports.allUsers= (req,res)=> {
 exports.insert= (req,res)=> {
   let data= req.body;
   if(data.role===null) {
-    data.role='user';
+    data.role='patient';
   } 
   UserModel.insert(data).then(response=> {
     if(!response) {
       res.statusCode=404;
-      res.end(JSON.stringify('Error'));
+      // res.end(JSON.stringify('Error'));
+      res.redirect('/user');
     }else {
       res.statusCode=200;
-      res.end(JSON.stringify({message:'success'}));
+      res.redirect('/user');
     }
   });
 }
@@ -48,14 +49,15 @@ exports.update= (req,res)=> {
         data.role= user.role;
       }
     })
-    console.log(`Data: ${JSON.stringify(data)}`)
     UserModel.update(data).then(response=> {
       if(!response) {
         res.statusCode= 404;
-        res.end(JSON.stringify({message:'not found'}));
+        // res.end(JSON.stringify({message:'not found'}));
+        res.redirect('/user');
       }else {
         res.statusCode= 200;
-        res.end(JSON.stringify({message:'success'}));
+        // res.end(JSON.stringify({message:'success'}));
+        res.redirect('/user');
       }
     });
   }).catch(err=> {
@@ -64,23 +66,23 @@ exports.update= (req,res)=> {
 }
 
 exports.delete= (req,res)=> {
-  let id= req.params.id;
+  let id= req.query.id;
   UserModel.findById(id).then(result=> {
     if(result==null) {
       res.statusCode= 404;
-      res.end(JSON.stringify('Not found'));
+      res.redirect('/user');
     }else {
       UserModel.delete(id).then(success=> {
         if(!success) {
-			res.statusCode= 404;
-			res.end(JSON.stringify({message:'Not found'}));
+          res.statusCode= 404;
+          res.redirect('/user');
         }else {
-			res.statusCode= 200;
-			res.end(JSON.stringify({message:'Success'}));
+          res.statusCode= 200;
+          res.redirect('/user');
         }
       });
     }
-  })
+  });
 }
 
 exports.loadById= (req,res)=> {
@@ -129,6 +131,39 @@ exports.schedule= (req,res)=> {
     });
   }   
 }
+
+exports.getAll= (req,res)=> {
+  let data= req.query;
+  UserModel.searchOrAll(data).then(users=> {
+    res.render('users.ejs',{
+      users: users,
+      search: data.search,
+      role: data.role
+    });
+  }).catch(err=> {
+    res.end(JSON.stringify(err));
+  });
+}
+
+exports.loadEditView= (req,res)=> {
+  let id= req.params.id;
+  if(id==null || id==undefined) {
+    res.render('login.ejs');
+  }else {
+    UserModel.findById(id).then(user=> {
+      if(user) {
+        res.render('user_edit.ejs',{user:user});
+      }else {
+        res.render('login.ejs');
+      }
+    });
+  }
+}
+
+exports.newUserView= (req,res)=> {
+  res.render('users_new.ejs');
+}
+
 
 let loggedInUser= (req,res)=> {
   return auth.getLoggedIn();

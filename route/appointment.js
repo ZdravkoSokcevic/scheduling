@@ -3,6 +3,8 @@ const AppointmentController= require('../controller/appointment');
 const AppointmentMiddleware= require('../middleware/appointment_auth');
 
 router.use('/', AppointmentMiddleware);
+
+router.get('/', AppointmentController.all);
 router.get('/all', AppointmentController.all);
 router.post('/insert', AppointmentController.insert);
 router.delete('/delete/:id', AppointmentController.delete);

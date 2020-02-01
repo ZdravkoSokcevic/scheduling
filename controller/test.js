@@ -1,5 +1,5 @@
 const response= require('./response');
-
+const User= require('../model/user');
 exports.home= (req,res)=> {
     response.setHeaders(res);
     res.statusCode= 200;
@@ -12,4 +12,10 @@ exports.loggedIn= (req,res)=> {
     res.statusCode= 200;
     console.log(res);
     res.end(JSON.stringify({message:'logged In'}));
+}
+
+exports.async= async(req,res)=> {
+    let user= await User.all();
+    console.log(`User: ${JSON.stringify(user)}`);
+    console.log("Asinhrono je");
 }

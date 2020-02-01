@@ -1,0 +1,144 @@
+<% include partials/header.ejs %> <% include partials/nav.ejs %>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="row justify-content-end mb-3">
+        <a href="/room/add" class="btn btn-info">Dodaj prostoriju</a>
+      </div>
+      <div class="row mb-3">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th>Naziv</th>
+              <th class="text-right">Akcije</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% rooms.forEach(room=> {  %>
+            <tr class="table-info">
+              <td><%= room.name %></td>
+              <td class="text-right">
+                <a
+                  title="Pogledaj raspored"
+                  role="button"
+                  class="btn p-0 mx-1 text-info"
+                >
+                  <i class="far fa-eye"></i>
+                </a>
+                <a
+                  title="Izmeni prostoriju"
+                  role="button"
+                  class="btn p-0 mx-1 text-warning"
+                  href="/room/edit/<%= room.id %>"
+                >
+                  <i class="far fa-edit"></i>
+                </a>
+                <button
+                  title="Izbrisi prostoriju"
+                  class="btn p-0 mx-1 text-danger"
+                  data-toggle="modal"
+                  data-target="#deleteModal"
+                  onclick="switch_form_id('<%= room.id %>')"
+                >
+                  <i class="far fa-trash-alt"></i>
+                </button>
+              </td>
+
+              <!-- DELETE MODAL -->
+
+              <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Brisanje korisnika</h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>
+                        Sigurno zelite da obrisete prostoriju
+                      </p>
+                    </div>
+                    <div class="modal-footer">
+                      <form action="/room/delete" method="GET">
+                        <input type="text" name="id" hidden id="room_id" />
+                        <button type="submit" class="btn btn-danger">
+                          Potvrdi brisanje
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6">
+      <form action="">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th colspan="2">Od:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="form-control" type="date" name="" id=""></td>
+              <td><input class="form-control" type="time" name="" id=""></td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th colspan="2">Do:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="form-control" type="date" name="" id=""></td>
+              <td><input class="form-control" type="time" name="" id=""></td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th colspan="2">Stomatolog</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="2">
+                <select class="form-control" name="dentist_id" id="">
+                  <% dentists.forEach(function(dentist) { %>
+                    <option value="<%= dentist.id %>">
+                      <%= dentist.first_name %>
+                    </option>
+                  <% }) %>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <td colspan="2" class="text-center">
+                <button class="btn btn-info">Potvrdi</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+
+<% include partials/scripts.ejs %>
+<script src="/javascripts/rooms.js"></script>

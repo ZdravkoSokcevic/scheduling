@@ -55,7 +55,7 @@ exports.dentist= (req,res)=> {
             if(auth==false) {
                 resolve(false);     
             }else {
-                if(auth.role=='doctor') {
+                if(auth.role=='dentist') {
                     resolve(true);
                 }else {
                     resolve(false);
@@ -72,7 +72,7 @@ exports.patient= (req,res)=> {
             if(auth==false) {
                 resolve(false);     
             }else {
-                if(auth.role=='user') {
+                if(auth.role=='patient') {
                     resolve(true);
                 }else {
                     resolve(false);

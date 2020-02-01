@@ -16,7 +16,7 @@ const RoomModel= {
     insert:(data)=> {
         return new Promise((res,rej)=> {
             if(data instanceof Object) {
-                let query= "INSERT INTO room (room_name) VALUES (?)";
+                let query= "INSERT INTO room (name) VALUES (?)";
                 conn.query(query,[data.name],(error,result)=> {
                     if(error) {
                         rej('Cannot insert data');
@@ -50,8 +50,25 @@ const RoomModel= {
                 } else {
                     res(result);
                 }
+            });
         })
-        })
+    },
+    edit:(id,data)=> {
+        return new Promise((res,rej)=> {
+            let query=`
+                UPDATE room
+                SET name=?
+                WHERE id=?
+            `;
+            console.log(query);
+            conn.query(query,[data.name,id],(err,result)=> {
+                if(err) {
+                    rej(err);
+                }else {
+                    res(result);
+                }
+            });
+        });
     }
 }
 

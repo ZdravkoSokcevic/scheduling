@@ -3,11 +3,13 @@ const User= require('../model/user');
 const Room= require('../model/room');
 const response= require('../controller/response');
 
-exports.all= (req,res)=> {
-    Appointment.all().then(results=> {
-        res.statusCode= 200;
-        res.end(JSON.stringify(results));
-    });
+exports.all= async(req,res)=> {
+    try{
+        let appointments= await Appointment.all();
+        res.render('appointments.ejs',{appointments:appointments});
+    }catch(err) {
+        console.log(err);
+    }
 }
 
 exports.insert= (req,res)=> {

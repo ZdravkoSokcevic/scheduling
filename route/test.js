@@ -8,4 +8,6 @@ router.post('/', TestController.home);
 router.get('/special', TestController.loggedIn);
 router.post('/special', TestController.loggedIn);
 
+router.get('/async', TestController.async);
+
 module.exports= router;

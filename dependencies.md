@@ -25,3 +25,6 @@ session-storage v1.0.1
 
 custom-env v1.0.2
   https://www.npmjs.com/package/custom-env
+
+
+  disable ssl certificates: -npm config set strict-ssl false

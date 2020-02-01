@@ -1,0 +1,40 @@
+<% include partials/header.ejs %> <% include partials/nav.ejs %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-md-6">
+            <form action="/user/edit/<%= user.id %>" method="POST">
+                <div class="form-group">
+                    <label>Rola</label>
+                    <select required class="form-control" name="role">
+                        <option <% if(user.role=='admin'){ %> selected <%}%> value="admin">Administrator</option>
+                        <option <% if(user.role=='dentist'){ %> selected <%}%> value="dentist">Stomatolog</option>
+                        <option <% if(user.role=='patient'){ %> selected <%}%> value="patient" selected>Pacijent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ime</label>
+                    <input type="text" class="form-control" name="first_name" value=<%=user.first_name%> >
+                </div>
+                <div class="form-group">
+                    <label>Prezime</label>
+                    <input type="text" class="form-control" name="last_name" value=<%=user.last_name%> >
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input required type="email" class="form-control" name="email" value=<%=user.email%> >
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="text" class="form-control" name="phone" value=<%=user.phone%> >
+                </div>
+                <div class="row justify-content-around">
+                    <a role="button" href="/user" class="btn btn-light">Odustani</a>
+                    <button type="submit" class="btn btn-info">Potvrdi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% include partials/scripts.ejs %>

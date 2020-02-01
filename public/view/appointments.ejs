@@ -1,0 +1,25 @@
+<% include partials/header.ejs %> <% include partials/nav.ejs %>
+<link href="/fullcalendar/packages/core/main.css" rel="stylesheet" />
+<link href="/fullcalendar/packages/daygrid/main.css" rel="stylesheet" />
+<link rel="stylesheet" href="/fullcalendar/packages/timegrid/main.css">
+<link href="/fullcalendar/packages/bootstrap/main.css" rel="stylesheet">
+
+<script src="/fullcalendar/packages/core/main.js"></script>
+<script src="/fullcalendar/packages/interaction/main.js"></script>
+<script src="/fullcalendar/packages/daygrid/main.js"></script>
+<script src="/fullcalendar/packages/timegrid/main.js"></script>
+<script src="/fullcalendar/packages/core/locales/sr.js"></script>
+<script src="/fullcalendar/packages/bootstrap/main.js"></script>
+
+<div class="container my-5">
+  <div class="row">
+      <div class="col-xs-12 col-md-12">
+          <div id="calendar"></div>
+      </div>
+  </div>
+</div>
+
+<% include partials/scripts.ejs %>
+<% include partials/appontment_modals.ejs %>
+<script src="/javascripts/external/moment.js"></script>
+<script src="/javascripts/appointments.js"></script>

@@ -1,0 +1,20 @@
+<% include ../partials/header.ejs %> <% include ../partials/nav.ejs %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-md-6 my-5 py-5">
+            <form action="/room/add" method="POST">
+                Dodaj prostoriju:
+                <div class="form-group">
+                    <input type="text" placeholder="Naziv prostorije" class="form-control" name="name" id="">
+                </div>
+                <div class="form-group text-right">
+                    <a role="button" href="/room" class="btn btn-light">Odustani</a>
+                    <button class="btn btn-success" type="submit" name="submit">Dodaj sobu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/scripts.ejs %>

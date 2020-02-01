@@ -1,0 +1,119 @@
+<% include partials/header.ejs %> <% include partials/nav.ejs %>
+
+<div class="container my-5">
+  <div class="row justify-content-between align-content-center my-3">
+    <div class="row no-gutters">
+      <form action="/user" method="GET" class="form-inline">
+        <div class="form-group mr-1">
+          <input
+            type="text"
+            placeholder="Ime, prezime ili email korisnika"
+            class="form-control"
+            name="search"
+            <%if(search) {%>
+            value=<%=search%>
+            <%}%>
+          />
+        </div>
+        <div class="form-group mx-1">
+          <select class="form-control" name="role">
+            <option value="" >Svi</option>
+            <option value="admin" <% if(role == "admin") { %> selected <% } %> >Administratori</option>
+            <option value="dentist" <% if(role == "dentist") { %> selected <% } %> >Stomatolozi</option>
+            <option value="patient" <% if(role == "patient") { %> selected <% } %> >Pacijenti</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-outline-info mx-1">
+          Pretrazi
+        </button>
+      </form>
+      <%if(search || role){%>
+      <form action="/user" method="GET" class="form-inline">
+        <button type="submit" class="btn btn-outline-danger mx-1">
+          <i class="fa fa-times"></i>
+        </button>
+      </form>
+      <%}%>
+    </div>
+    <a role="button" href="/user/new" class="btn btn-info">Dodaj korisnika</a>
+  </div>
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+        <tr class="bg-info text-light">
+          <th>Rola</th>
+          <th>Ime</th>
+          <th>Prezime</th>
+          <th>Email</th>
+          <th>Telefon</th>
+          <th class="text-right">Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.role %></td>
+          <td><%= user.first_name %></td>
+          <td><%= user.last_name %></td>
+          <td><%= user.email %></td>
+          <td><%= user.phone %></td>
+          <td class="text-right">
+            <a
+              title="Pogledaj profil"
+              role="button"
+              class="btn p-0 mx-1 text-info"
+            >
+              <i class="far fa-eye"></i>
+            </a>
+            <a
+              title="Izmeni profil"
+              role="button"
+              class="btn p-0 mx-1 text-warning"
+              href=<%="/user/edit/"+user.id%>
+            >
+              <i class="far fa-edit"></i>
+            </a>
+            <button
+              title="Izbrisi korisnika"
+              class="btn p-0 mx-1 text-danger"
+              data-toggle="modal" 
+              data-target="#deleteModal<%=user.id%>"
+            >
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+
+        <!-- DELETE MODAL -->
+
+        <div class="modal" tabindex="-1" role="dialog" id="deleteModal<%=user.id%>">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Brisanje korisnika</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>
+                  Sigurno zelite da obrisete korisnika
+                  <%=user.first_name + " " + user.last_name%>?
+                </p>
+              </div>
+              <div class="modal-footer">
+                <form action="/user/delete" method="GET">
+                  <input type="text" name="id" value=<%=user.id%> hidden />
+                  <button type="submit" class="btn btn-danger">Potvrdi brisanje</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% include partials/scripts.ejs %>

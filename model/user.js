@@ -16,9 +16,13 @@ let UserModel = {
     insert: data => {
         // console.log(data);
         return new Promise((res, rej) => {
-            let query = "INSERT INTO users (first_name,last_name,username,email,password,role,access_token,remember_token,profile_picture) VALUES (?,?,?,?,?,?,?,?,?)";
+            let query = `
+                INSERT INTO users 
+                    (first_name,last_name,email,password,phone, role,access_token,remember_token,profile_picture) 
+                VALUES 
+                    (?,?,?,?,?,?,?,?,?)`;
             let password = bcrypt.hash(data.password, 5, (err, pwwd) => {
-                conn.query(query, [data.first_name, data.last_name, data.username, data.email, pwwd, data.role, null, null, null], (err, record, info) => {
+                conn.query(query, [data.first_name, data.last_name, data.email, pwwd, data.phone, data.role, null, null, null], (err, record, info) => {
                     if (err) {
                         throw err;
                         res(false);
@@ -31,8 +35,11 @@ let UserModel = {
     },
     update: data => {
         return new Promise((res, rej) => {
-            let query = "UPDATE users SET first_name=?,last_name=?,username=?,email=?,role=? WHERE id=?";
-            conn.query(query, [data.first_name, data.last_name, data.username, data.email, data.role, data.id], (err, result) => {
+            let query = `
+                UPDATE users 
+                SET first_name=?,last_name=?,email=?,phone=?,role=?
+                WHERE id=?`;
+            conn.query(query, [data.first_name, data.last_name, data.email, data.phone, data.role, data.id], (err, result) => {
                 if (err) {
                     throw err;
                     res(false);
@@ -126,6 +133,77 @@ let UserModel = {
                     rej(rejected);
                 });
             }
+        });
+    },
+    searchOrAll:(data)=> {
+        return new Promise((res,rej)=> {
+            console.log(`Uslov ${!('search' in data) && !('role' in data)}`);
+            if(!('search' in data) && !('role' in data)) {
+                console.log("Van search");
+                let query= `
+                    SELECT *
+                    FROM users 
+                `;
+                conn.query(query,(err,users)=> {
+                    if(err) throw err;
+                    else {
+                        res(users);
+                    }
+                })
+            }else {
+                let q_data= data;
+                console.log(`Data u search: ${JSON.stringify(q_data)}`);
+                console.log("U search");
+                if(q_data.role=='')
+                {
+                    let query=`
+                        SELECT *
+                        FROM users
+                        WHERE
+                            first_name like ?
+                            OR last_name like ?
+                            OR email like ?
+                    `;
+                    let data_search=['%'+data.search+'%','%'+data.search+'%','%'+data.search+'%'];
+                    conn.query(query,data_search,(err,users)=> {
+                        if(err) throw new Error('Something wen\'t wrong');
+                        else {
+                            res(users);
+                        }
+                    });
+                }else {
+                    let query=`
+                        SELECT *
+                        FROM users
+                        WHERE role like ?
+                        AND (
+                            first_name like ?
+                            OR last_name like ?
+                            OR email like ?
+                        ) 
+                    `;
+                    let data_search=[data.role,'%'+data.search+'%','%'+data.search+'%','%'+data.search+'%'];
+                    conn.query(query,data_search,(err,users)=> {
+                        if(err) throw new Error('Something wen\'t wrong');
+                        else {
+                            res(users);
+                        }
+                    });
+                }
+            }
+        });
+    },
+    dentists:()=> {
+        return new Promise((res,rej)=> {
+            let query=`
+                SELECT *
+                FROM users
+                WHERE role like ?
+            `;
+            conn.query(query,['dentist'],(err,results)=> {
+                if(err) throw new Error();
+                else res(results);
+            });
         });
     }
 }
