@@ -13,17 +13,20 @@ document.addEventListener("DOMContentLoaded", function() {
   var calendarEl = document.getElementById("calendar");
 
   let switchToTimeView= (calendar,date_to_jump)=> {
+    // console.log(date_to_jump.date);
     // let moment= new moment();
-    let date=moment(date_to_jump);
+    // console.log(calendar);
+    calendar.state.currentDate= date_to_jump.date;
+    // $('#calendar').fullCalendar('gotoDate', date_to_jump);
+
+    let date=moment(date_to_jump).add(1,'day');
+    // console.log();
+    calendar.state.currentDate= date._i.date;
+    console.log(date._i.dateStr);
     let events= global_time_events;
-    calendar.changeView('timeGrid','agenda', {
-      start: date_to_jump,
-      end: date_to_jump,
-      gotoDate: date_to_jump,
-      date: date_to_jump
-    }).FullCalendar('gotoDate',date_to_jump);
+    calendar.changeView('timeGrid','agenda', {start:date._i.dateStr});
     // calendar.fullCalendar( 'gotoDate', date_to_jump );
-    calendar.render();
+    // calendar.render();
     console.log('Kliknuo si '+date_to_jump.dateStr);
   }
   let handleDateSelected= (date)=> {
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
         start: '2020-02-04T11:00:00',
         end: '2020-02-04T14:00',
         constraint: 'businessHours2',
-        color:'yellow'
+        color:'blue'
     }],
     dateClick: (date)=> {
       // console.log(calendar.changeView);

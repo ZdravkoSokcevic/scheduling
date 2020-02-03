@@ -12,7 +12,10 @@ let connString={
 let connection= mysql.createConnection(connString);
 
 connection.connect(err=> {
-  if(err) throw err;
+  if(err) {
+			console.log(err);
+			throw err;
+	}
   console.log("Connected to db");
 });
 
