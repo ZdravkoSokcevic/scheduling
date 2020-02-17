@@ -5,8 +5,9 @@ const response= require('../controller/response');
 
 exports.all= async(req,res)=> {
     try{
+        let rooms= await Room.all();
         let appointments= await Appointment.all();
-        res.render('appointments.ejs',{appointments:appointments});
+        res.render('appointments.ejs',{appointments:appointments,rooms:rooms});
     }catch(err) {
         console.log(err);
     }
@@ -54,7 +55,7 @@ exports.delete= (req,res)=> {
 exports.loadById= (req,res)=> {
     let id= req.params.id;
     Appointment.findById(id).then((row,rejection)=> {
-        
+
     });
 }
 
@@ -73,7 +74,7 @@ exports.request= (req,res)=> {
                 }else {
                     User.findById(data.patient_id).then(patient=> {
                         if(patient.role!=='user') {
-                            response.notFound(res);   
+                            response.notFound(res);
                         }else {
                             Room.findById(data.room_id).then(room=> {
                                 if(room==null) {
@@ -81,7 +82,7 @@ exports.request= (req,res)=> {
                                 }else {
                                     Appointment.insert(data).then(done=> {
                                         if(done==null) {
-                                            response.notFound(res); 
+                                            response.notFound(res);
                                         }else {
                                             response.ok(res);
                                         }
@@ -97,3 +98,8 @@ exports.request= (req,res)=> {
     User.findById()
 }
 
+exports.allJson= async(req,res)=> {
+    let appointments= await Appointment.all();
+    let data=[];
+    res.end(JSON.stringify(appointments));
+}

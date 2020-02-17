@@ -20,7 +20,7 @@ exports.allUsers= (req,res)=> {
 
 exports.insert= (req,res)=> {
   let data= req.body;
-  if(data.role===null) {
+  if(data.role=='undefined' || data.role==null) {
     data.role='patient';
   } 
   UserModel.insert(data).then(response=> {

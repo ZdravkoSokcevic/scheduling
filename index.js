@@ -23,12 +23,35 @@ const jwt= require('./helper/jwt');
 
 const path= require('path');
 
+const session= require('express-session');
+
+const flash= require('express-flash');
+
+const SessionMiddleware= require('./middleware/session');
+
 jwt();
 
 app.use(bodyParser());
 
-app.use('/', BaseRouter);
 
+let sesss={
+	cookie:{},
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { secure: false },
+	genid: function(req) {
+		return '213';
+	}
+}
+
+let sess= session(sesss);
+
+app.use(sess);
+app.use(flash());
+
+app.use('/', BaseRouter);
+// app.get('/', SessionMiddleware);
 // User routes
 app.use('/user', UserRouter);
 app.use('/room', RoomRouter);

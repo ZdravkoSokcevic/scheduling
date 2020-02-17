@@ -1,5 +1,12 @@
 <% include partials/header.ejs %> <% include partials/nav.ejs %>
 
+<% if(typeof locals.loggedIn===undefined) { %>
+  <script>
+    if(localStorage.getItem("loggedIn") !== null)
+      localStorage.removeItem('loggedIn');
+  </script>
+<% } %>
+
 <section id="carousel" class="carousel">
   <div class="overlay">
     <h1 class="text-center">Zagarantovan savrsen osmeh!</h1>

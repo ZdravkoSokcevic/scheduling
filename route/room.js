@@ -2,6 +2,9 @@ const router = require('express').Router();
 
 const RoomController = require('../controller/room');
 
+const RoomMiddleware= require('../middleware/room');
+
+router.use('/', RoomMiddleware);
 router.get('/', RoomController.loadRoomsView);
 router.get('/add', RoomController.loadAddRoomsView);
 router.post('/add', RoomController.store);

@@ -9,4 +9,13 @@
   </head>
   <body>
   <div class="app-container">
-    
+  <!-- Place for user login -->
+  <% if(typeof user!=='undefined' && user){ %>
+    <script>
+      var loggedIn= <%- JSON.stringify(user) %>
+      localStorage.setItem('loggedIn',JSON.stringify(loggedIn));
+    </script>
+  <% } %>
+  <!-- Authorization script -->
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/auth.js" charset="utf-8"></script>

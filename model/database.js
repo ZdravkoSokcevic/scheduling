@@ -7,7 +7,7 @@ let connString={
   password: process.env.DB_PASS,
   database: process.env.DB_NAME
 }
-
+console.log(connString);
 
 let connection= mysql.createConnection(connString);
 
