@@ -14,6 +14,8 @@ router.post('/new', UserController.insert);
 router.get('/edit/:id', UserController.loadEditView);
 router.post('/edit/:id', UserController.update);
 router.get('/delete', UserController.delete);
+
+router.post('/work_time', UserController.updateOrCreateWorkingTime );
 router.use('/', userMiddleware);
 
 router.get('/all', UserController.allUsers);

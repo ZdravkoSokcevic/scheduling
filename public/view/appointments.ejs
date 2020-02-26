@@ -15,6 +15,28 @@
 <script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
 <script src='/fullcalendar/fullcalendar.min.js'></script>
 
+<!-- Assign Appointments to js file -->
+<script>
+	var all_ev= [];
+	let single={};
+</script>
+<% appointments.forEach(appointment=> { %>
+	<script>
+		single= {
+			id: '<%- appointment.id %>',
+			date_from: '<%- appointment.date_from %>',
+			date_to: '<%- appointment.date_to %>',
+			status: '<%- appointment.status %>',
+			doctor_fname: '<%- appointment.doctor_fname %>',
+			doctor_lname: '<%- appointment.doctor_lname %>',
+			doctor_role: '<%- appointment.doctor_role %>',
+			doctor_phone: '<%- appointment.doctor_phone %>',
+			doctor_email: '<%- appointment.doctor_email %>'
+		};
+		all_ev.push(single);
+	</script>
+<% }); %>
+
 <div class="container my-5">
   <div class="row">
       <div class="col-xs-12 col-md-12">

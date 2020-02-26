@@ -4,9 +4,21 @@ const User= require('./user');
 const Appointment= {
     all:()=> {
         return new Promise((res,rej)=> {
-            let query= "SELECT * FROM appointments";
+            let query=`
+                SELECT appointments.*,
+                    users.id as user_id,
+                    users.first_name as doctor_fname,
+                    users.last_name as doctor_lname,
+                    users.email as doctor_email,
+                    users.role as doctor_role,
+                    users.phone as doctor_phone
+                FROM appointments
+                JOIN users 
+                    ON appointments.dentist_id=users.id
+                WHERE users.role like 'dentist'
+            `;
             conn.query(query,(error,data)=> {
-                if(error) throw new Error('Cannot read from db');
+                if(error) throw new Error(error);
                 else res(data);
             });
         });

@@ -11,9 +11,23 @@ let global_time_events=[{
 let currentView='month';
 
 let show_form=(calendar,date)=> {
-
-  $('#single_date_modal').trigger('focus');
-  $('#single_date_modal').modal('show');
+  // If user is logged in
+  console.log(isAdminLoggedIn());
+  /*
+  |------------------------------------------------
+  | Depends of user role show different modals
+  |------------------------------------------------
+  */
+  if(isAdminLoggedIn()) {
+    $('#single_time_modal').trigger('focus');
+    $('#single_time_modal').modal('show');
+  }else if(isDentistLoggedIn) {
+    $('#dentist_modal').trigger('focus');
+    $('#dentist_modal').modal('show');
+  }else if(isUserLoggedIn()) {
+    $('#single_date_modal').trigger('focus');
+    $('#single_date_modal').modal('show');
+  }
 }
 let fetchData= (calendar)=> {
   $.ajax({
@@ -56,7 +70,21 @@ document.addEventListener("DOMContentLoaded", function() {
   let handleDateSelected= (date)=> {
     console.log(`selektovao si ${date.startStr}`);
   }
-
+  /*
+  |----------------------------------------------------------------------
+  | Alertify conf
+  |----------------------------------------------------------------------
+  */
+  // alertify.set({
+  //   labels : {
+  //     ok     : "OK",
+  //     cancel : "Cancel"
+  //   },
+  //   delay : 5000,
+  //   buttonReverse : false,
+  //   buttonFocus   : "ok"
+  // });
+  // alertify.log('To je to', 'alert');
 /*
 |------------------------------------------------------------------------
 | Calendar configuration
@@ -72,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
     selectable: true,
     dropable:true,
     displayEventTime:true,
-    events:global_time_events,
+    events:all_ev,
     header: {
       right: 'prev,next danas',
       center: 'title',

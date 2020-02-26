@@ -157,8 +157,11 @@ exports.login= async(req,res)=> {
         else {
             let match= await bcrypt.compare(data.password, user.password);
             console.log(`Sifra tacna: ${match}`);
-            if(!match)
-                res.redirect('/',{announcements:announcements});
+            if(!match) {
+                req.flash('code',200);
+                req.flash('message','Pogresno korisnicko ime ili lozinka');
+                res.redirect('/login');
+            }
             else {
                 /*
                 |--------------------------------------

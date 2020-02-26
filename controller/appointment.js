@@ -6,8 +6,9 @@ const response= require('../controller/response');
 exports.all= async(req,res)=> {
     try{
         let rooms= await Room.all();
+        let dentists= await User.find('role','dentist');
         let appointments= await Appointment.all();
-        res.render('appointments.ejs',{appointments:appointments,rooms:rooms});
+        res.render('appointments.ejs',{appointments:appointments,rooms:rooms,dentists:dentists});
     }catch(err) {
         console.log(err);
     }
