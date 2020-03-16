@@ -1,5 +1,4 @@
-window.onload= ()=> {
-  $date=$('#select_appointment_date').datetimepicker({
+let dt_pick_conf= {
     format: 'dd-mm-yyyy hh:ii',
     icons: {
         time: "fa fa-clock-o",
@@ -15,19 +14,24 @@ window.onload= ()=> {
     autoclose:true,
     language: 'rs-latin',
     weekStart:1
-  });
-  // console.log(isUserLoggedIn());
-  if(isUserLoggedIn()) {
-    console.log(global_time_events);
-    console.log('user je ');
-    $date= $('#select_appointment_date').datetimepicker({
-      // disabledTimeIntervals:[[moment({h:0}),moment({h:18})]]
-    });
-  }
+}
 
-  $date.change((e)=> {
-    console.log('promjenjeno je');
+let initializeDatetimePicker= ()=> {
+  console.info("u appointment si");
+  $date=Globals.userTimeFrom.datetimepicker(dt_pick_conf);
 
-  })
-  console.log($date);
+    // $('#select_working_date').datetimepicker(dt_pick_conf);
+
+
+  // if(isUserLoggedIn()) {
+    // $date1= $('#select_appointment_date').datetimepicker({
+    // });
+    // $('#select_working_date').datetimepicker(dt_pick_conf);
+  // }
+
+  // $('#select_appointment_date_from').change((e)=> {
+  //   // console.log(e.date);
+  //   // console.log('promjenjeno je');
+
+  // })
 }

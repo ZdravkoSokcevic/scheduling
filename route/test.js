@@ -2,6 +2,10 @@ const router= require('express').Router();
 const TestController= require('../controller/test');
 const TestMiddleware= require('../middleware/test');
 
+router.post('/session', (req,res)=> {
+    // res.send({pera:'djetlic'});
+    res.end(JSON.stringify(req.session));
+});
 router.use('/', TestMiddleware);
 router.get('/', TestController.home);
 router.post('/', TestController.home);

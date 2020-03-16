@@ -35,8 +35,10 @@ const Appointment= {
             //             INTO 
             //             appointments(date_from, date_to, dentist_id, patient_id, room_id, status) 
             //             VALUES(${data.date_from}, ${data.date_to}, ${data.dentist_id}, ${data.patient_id}, ${data.room_id}, ${data.status})`);
+            if(!'room_id' in data)
+                data.room_id=null;
             conn.query(query,[data.date_from, data.date_to, data.dentist_id, data.patient_id, data.room_id, data.status],(error,result)=> {
-                if(error) throw new Error('Cannot insert data');
+                if(error) throw new Error(error);
                 else res(result);
             });
         });

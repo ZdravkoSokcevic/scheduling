@@ -14,7 +14,6 @@ let UserModel = {
         });
     },
     insert: data => {
-        // console.log(data);
         return new Promise((res, rej) => {
             let query = `
                 INSERT INTO users 
@@ -56,7 +55,6 @@ let UserModel = {
                 if (err) {
                     res(null);
                 } else {
-                    console.log(result);
                     if (Object.keys(result).length === 0) {
                         res(null);
                     } else {
@@ -109,9 +107,7 @@ let UserModel = {
                     FROM users
                     WHERE ${column}=?
                 `;
-                // console.log(column,value);
                 conn.query(query,value,(error,results)=> {
-                    console.log(results);
                     if(error || results==[]) {
                         throw new Error('Cannot read');
                         rej('Cannot read');
@@ -137,9 +133,7 @@ let UserModel = {
     },
     searchOrAll:(data)=> {
         return new Promise((res,rej)=> {
-            console.log(`Uslov ${!('search' in data) && !('role' in data)}`);
             if(!('search' in data) && !('role' in data)) {
-                console.log("Van search");
                 let query= `
                     SELECT *
                     FROM users 
@@ -152,8 +146,6 @@ let UserModel = {
                 })
             }else {
                 let q_data= data;
-                console.log(`Data u search: ${JSON.stringify(q_data)}`);
-                console.log("U search");
                 if(q_data.role=='')
                 {
                     let query=`

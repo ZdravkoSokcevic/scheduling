@@ -129,11 +129,13 @@ exports.getUser= async(req,res)=> {
     //         response.unauthorized(res);
     //     }
     // });
+    console.log('Sesija');
+    console.log(req.session);
     return new Promise(async(res,rej)=> {
         if(req.session && req.session.user !== 'undefined' && typeof req.session.user!=='undefined')
         {
-            let user= await User.findById(2);
-            console.log(`User: ${JSON.stringify(user)}`);
+            let user= await User.findById(req.session.user.id);
+            // console.log(`User: ${JSON.stringify(user)}`);
             if(user!==null)
                 res(user);
             else rej(false);
@@ -172,16 +174,24 @@ exports.login= async(req,res)=> {
                 let usr_obj= {
                     id: user.id,
                     first_name: user.first_name,
+                    email: user.email,
                     last_name: user.last_name,
                     role: user.role
                 }
                 // console.log(usr_obj);
                 // res.locals.user= usr_obj;
-                console.log(req.session);
                 req.session.user= usr_obj;
+                console.log('sesija u login');
+                console.log(req.session);
 
                 res.render('index.ejs',{user:req.session.user,announcements:announcements});
             }
         }
     }
+}
+
+exports.logout= async(req,res)=> {
+    req.session.user= '';
+    res.statusCode=200;
+    res.end(JSON.stringify({message:'success'}));
 }

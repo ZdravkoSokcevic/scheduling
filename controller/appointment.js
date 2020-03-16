@@ -1,13 +1,16 @@
+const moment= require('moment');
 const Appointment= require('../model/appointment');
 const User= require('../model/user');
 const Room= require('../model/room');
 const response= require('../controller/response');
+const Auth= require('./auth');
 
 exports.all= async(req,res)=> {
     try{
         let rooms= await Room.all();
         let dentists= await User.find('role','dentist');
         let appointments= await Appointment.all();
+        console.log(appointments);
         res.render('appointments.ejs',{appointments:appointments,rooms:rooms,dentists:dentists});
     }catch(err) {
         console.log(err);
@@ -17,8 +20,6 @@ exports.all= async(req,res)=> {
 exports.insert= (req,res)=> {
     let data= req.body;
     if(data instanceof Object) {
-        console.log('Date from prije'+data.date_from);
-        console.log('Date_to prije'+data.date_to);
         if(data.date_from!==null) {
             data.date_from= new Date(data.date_from);
         }
@@ -63,38 +64,75 @@ exports.loadById= (req,res)=> {
 
 exports.request= (req,res)=> {
     let data= req.body;
-    if(!('dentist_id' in data) || !('patient_id' in data) || !('room_id' in data) ) {
-        response.notFound(res);
+    if(!('dentist_id' in data)) {
+        res.redirect('/appointment');
     }else {
-        User.findById(data.dentist_id).then(dentist=> {
-            if(dentist==null) {
-                response.notFound(res);
+        Auth.getUser(req,res).then(user=> {
+            if(user==null && !'patient_id' in data) {
+                res.redirect('/appointment');
             }else {
-                if(dentist.role!=='doctor') {
-                    response.notFound(res);
-                }else {
-                    User.findById(data.patient_id).then(patient=> {
-                        if(patient.role!=='user') {
-                            response.notFound(res);
+                User.findById(data.dentist_id).then(dentist=> {
+                    if(dentist==null) {
+                        req.flash('code',200);
+                        req.flash('message','Nedozvoljena operacija');
+                        res.redirect('/appointment');
+                    }else {
+                        if(dentist.role!=='dentist') {
+                            res.redirect('/appointment');
                         }else {
-                            Room.findById(data.room_id).then(room=> {
-                                if(room==null) {
-                                    response.notFound(res);
+                            let patient_id= data.patient_id || user.id;
+                            User.findById(patient_id).then(patient=> {
+                                if(patient.role!=='patient') {
+                                    res.redirect('/appointment');
                                 }else {
-                                    Appointment.insert(data).then(done=> {
-                                        if(done==null) {
-                                            response.notFound(res);
-                                        }else {
-                                            response.ok(res);
-                                        }
-                                    });
+                                    console.log('Datum from to prije: ');
+                                    console.log(data.date_from);
+                                    console.log(data.date_to);
+                                    let date_from= new Date(data.date_from);
+                                    let date_to= new Date(data.date_to);
+                                    data.date_from= date_from;
+                                    data.date_to= date_to;
+                                    data.patient_id= patient_id;
+                                    console.log('Date from to poslije: ');
+                                    console.log(date_from);
+                                    console.log(date_to);
+                                    if('room' in data) {
+                                        Room.findById(data.room_id).then(room=> {
+                                            if(room==null) {
+                                                response.notFound(res);
+                                            }else {
+                                                Appointment.insert(data).then(done=> {
+                                                    if(done==null) {
+                                                        response.notFound(res);
+                                                    }else {
+                                                        response.ok(res);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }else {
+                                        Appointment.insert(data).then(done=> {
+                                            if(done==null) {
+                                                req.flash('code',500);
+                                                req.flash('message','Nije moguce sacuvati,pokusajte kasnije');
+                                                res.redirect('/appointment');
+                                            }else {
+                                                console.log("Uspjesno je sacuvao appointment");
+                                                req.flash('code',200);
+                                                req.flash('message', 'Uspesno ste poslali zahtev.');
+                                                res.redirect('/appointment');
+                                            }
+                                        });
+                                    }
+        
                                 }
                             });
                         }
-                    });
-                }
+                    }
+                });
             }
-        })
+        });
+
     }
     User.findById()
 }

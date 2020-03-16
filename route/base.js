@@ -9,6 +9,7 @@ router.get('/login', (req,res)=> {
     res.render('login.ejs');
 });
 
+router.get('/logout', AuthController.logout);
 router.post('/login', AuthController.login);
 
 router.post('/register', UserController.insert);

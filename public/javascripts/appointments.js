@@ -1,3 +1,4 @@
+var Globals= {};
 let global_time_events=[{
     start: '2020-02-02T12:00',
     end: '2020-02-02T15:00',
@@ -12,21 +13,36 @@ let currentView='month';
 
 let show_form=(calendar,date)=> {
   // If user is logged in
-  console.log(isAdminLoggedIn());
+  // console.log(isAdminLoggedIn());
   /*
   |------------------------------------------------
   | Depends of user role show different modals
   |------------------------------------------------
   */
+
+  //  ToDo validate form on loading
+  //  and disable buttons
   if(isAdminLoggedIn()) {
-    $('#single_time_modal').trigger('focus');
-    $('#single_time_modal').modal('show');
-  }else if(isDentistLoggedIn) {
-    $('#dentist_modal').trigger('focus');
-    $('#dentist_modal').modal('show');
-  }else if(isUserLoggedIn()) {
+    console.error('Adminova rola');
+    $('#select_working_date').attr('value',moment(date).format('DD-MM-YYYY HH:mm'));
+    // $('#selected_working_date')
     $('#single_date_modal').trigger('focus');
     $('#single_date_modal').modal('show');
+  }else if(isDentistLoggedIn()) {
+    $dentist_modal= $('#dentist_modal');
+    $dentist_modal.trigger('focus');
+    $dentist_modal.modal('show');
+  }else if(isUserLoggedIn()) {
+    console.log(date);
+    $date_from= $('#select_appointment_date_from');
+    $date_to= $('#select_appointment_date_end_time');
+    Globals.userTimeFrom.val(moment(date).format(Globals.INVERT_FORMAT));
+    Globals.userTimeFrom.data('good_format',moment(date).format(Globals.GOOD_FORMAT));
+    let HalfHourAfter= moment(date).add(moment.duration(0.5,'hour'));
+    Globals.userTimeTo.val(HalfHourAfter.format(Globals.INVERT_FORMAT));    
+    Globals.userTimeTo.data('good_format',HalfHourAfter.format(Globals.GOOD_FORMAT));
+    Globals.singleTimeModal.trigger('focus');
+    Globals.singleTimeModal.modal('show');
   }
 }
 let fetchData= (calendar)=> {
@@ -70,21 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let handleDateSelected= (date)=> {
     console.log(`selektovao si ${date.startStr}`);
   }
-  /*
-  |----------------------------------------------------------------------
-  | Alertify conf
-  |----------------------------------------------------------------------
-  */
-  // alertify.set({
-  //   labels : {
-  //     ok     : "OK",
-  //     cancel : "Cancel"
-  //   },
-  //   delay : 5000,
-  //   buttonReverse : false,
-  //   buttonFocus   : "ok"
-  // });
-  // alertify.log('To je to', 'alert');
+
 /*
 |------------------------------------------------------------------------
 | Calendar configuration
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if(currentView=='month')
         switchToTimeView(calendar,date);
       else {
-        show_form(calendar,date);
+        show_form(calendar,date.dateStr);
       }
     },
     eventRender:(event,element)=> {
@@ -143,7 +145,6 @@ document.addEventListener("DOMContentLoaded", function() {
     eventClick: (event, element)=> {
       if(isDentistLoggedIn())
       {
-        console.log('doktor');
       }else if(isUserLoggedIn()) {
 
       }else {
@@ -162,3 +163,27 @@ document.addEventListener("DOMContentLoaded", function() {
   fetchData(calendar);
   calendar.render();
 });
+
+/**
+ * ---------------------------------------------------------------
+ *  Entry point for appointment page
+ * ---------------------------------------------------------------
+ */
+window.onload= ()=> {
+  //  Selectors for user time modal
+  Globals.singleTimeModal= $('#single_time_modal');
+  Globals.userTimeFrom= $('#select_appointment_date_from');
+  Globals.userTimeTo= $('#select_appointment_date_end_time');
+
+  Globals.dentistModal= $('#dentist_modal');
+  
+  // selectors to inver time from user friendly time
+  // to backend compatibile time
+  Globals.INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
+  Globals.GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
+
+  Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
+  $('#appointment_btn').click((e)=> appointmentInsertValidate(e));
+  console.error('usao ovdje');
+  initializeDatetimePicker();
+}

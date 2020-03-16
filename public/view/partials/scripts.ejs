@@ -1,4 +1,37 @@
 <!-- Alertify module -->
+<!-- Flash messages -->
+<% if(typeof messages !== 'undefined' && messages && messages.message && messages.message!=='undefined') { %>
+    <% if(typeof code!== 'undefined') { %>
+        <% if(code==500 || code==404) { %>
+            <%# Handle messages %>
+            <script>
+                let message= '<%- messages.message %>';
+                $.notify(message, {
+                    showProgressbar: show_progressbar,
+                    type:'danger',
+                    allow_dismiss: true,
+                    delay: 1500,
+                    timer: 100
+                });
+            </script>
+        <% }else if(code==200) { %>
+            <%# Handle 200 code messages %>
+            <script>
+                let message= '<%- messages.message %>';
+                $.notify(message, { 
+                // $('body').notify('To je to', {type: 'danger'})
+                    showProgressbar: show_progressbar,
+                    type:'success',
+                    allow_dismiss: true,
+                    delay: 1500,
+                    timer: 100
+                });
+            </script>
+        <% } %>
+    <% } %>
+  <% } %>
+
 <!-- <div id="alert"></div> -->
-<script type="text/javascript" src="/javascripts/external/alertify.js-0.3.11/lib/alertify.min.js"></script>
+<script src="/javascripts/validate_forms.js"></script>
+<script src="/bootstrap-notify/bootstrap-notify.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>

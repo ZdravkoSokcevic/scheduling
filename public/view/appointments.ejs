@@ -12,7 +12,7 @@
 <% include partials/scripts.ejs %>
 
 <script src="/javascripts/external/moment.js"></script>
-<script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+<script src="/javascripts/external/jquery_ui.custom.min.js"></script>
 <script src='/fullcalendar/fullcalendar.min.js'></script>
 
 <!-- Assign Appointments to js file -->
@@ -34,6 +34,7 @@
 			doctor_email: '<%- appointment.doctor_email %>'
 		};
 		all_ev.push(single);
+		console.log(all_ev);
 	</script>
 <% }); %>
 
@@ -65,3 +66,4 @@
 <script src="/javascripts/external/moment.js"></script>
 <script src="/javascripts/calendar_conf.js"></script>
 <script src="/javascripts/appointments.js"></script>
+<% include partials/footer %>

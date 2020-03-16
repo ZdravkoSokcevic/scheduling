@@ -22,8 +22,8 @@
           </div>
           <div class="form-row">
             <div class="form-group col-10">
-              <label for="select_appointment_date" class="col-form-label">Message:</label>
-              <input class="form-control" id="select_appointment_date" readonly>
+              <label for="select_working_date" class="col-form-label">Message:</label>
+              <input class="form-control" id="select_working_date" readonly>
             </div>
             <div class="form-group col-2">
                 <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
@@ -41,46 +41,50 @@
 </div>
 
 
-<!-- Schedule insert  -->
+<!-- Appointment insert  -->
 <div class="modal fade" id="single_time_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Unesite radno vrijeme</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Zakazite termin:</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form >
+        <form action="/appointment/request" method="POST">
           <div class="form-group">
-            <label for="recipient-name" class="room_select">Pocetak rada: </label>
-            <select class="custom-select form-control-lg" id="room_select" name="room_id">
-              <option disabled selected>Odaberite sobu</option>
-                <% rooms.forEach(room=> { %>
-                  <option value="<%-room.id %>"><%- room.name %></option>
-                <% }) %>
+            <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
+            <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id">
+              <option disabled selected>Odaberite lekara:</option>
+              <% dentists.forEach(dentist=> { %>
+                <option value="<%= dentist.id %>"><%- dentist.first_name+' '+dentist.last_name %></option>
+              <% }) %>
             </select>
           </div>
           <div class="form-row">
             <div class="form-group col-10">
-              <label for="select_appointment_date" class="col-form-label">Message:</label>
-              <input class="form-control" id="select_appointment_date" readonly>
+              <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
+              <input class="form-control" id="select_appointment_date_from" name="date_from" readonly>
+              <input type="text" id="select_appointment_date_end_time" name="date_to" hidden>
             </div>
             <div class="form-group col-2">
                 <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+            <button type="submit" class="btn btn-primary" name="submit" id="appointment_btn">Zakazi termin</button>
+          </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-        <button type="button" class="btn btn-primary">Zakazi termin</button>
       </div>
 
     </div>
   </div>
 </div>
+
+<!-- Appointment accept or deny 
+Doctor only -->
 
 <script src="/javascripts/datepicker_conf.js"></script>
 <script>

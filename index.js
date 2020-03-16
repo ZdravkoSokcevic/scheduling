@@ -25,6 +25,8 @@ const path= require('path');
 
 const session= require('express-session');
 
+const cookieParser= require('cookie-parser');
+
 const flash= require('express-flash');
 
 const SessionMiddleware= require('./middleware/session');
@@ -47,11 +49,12 @@ let sesss={
 
 let sess= session(sesss);
 
+app.use(cookieParser());
 app.use(sess);
 app.use(flash());
 
 app.use('/', BaseRouter);
-// app.get('/', SessionMiddleware);
+app.get('/', SessionMiddleware);
 // User routes
 app.use('/user', UserRouter);
 app.use('/room', RoomRouter);
