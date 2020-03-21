@@ -182,7 +182,7 @@ window.onload= ()=> {
   Globals.INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
   Globals.GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
 
-  Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
+  //Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
   $('#appointment_btn').click((e)=> appointmentInsertValidate(e));
   console.error('usao ovdje');
   initializeDatetimePicker();

@@ -20,7 +20,7 @@ let initializeDatetimePicker= ()=> {
   console.info("u appointment si");
   $date=Globals.userTimeFrom.datetimepicker(dt_pick_conf);
 
-    // $('#select_working_date').datetimepicker(dt_pick_conf);
+    $('#select_working_date').datetimepicker(dt_pick_conf);
 
 
   // if(isUserLoggedIn()) {

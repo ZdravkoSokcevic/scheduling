@@ -3,7 +3,6 @@
 
 // Appointment insert form validate
 let appointmentInsertValidate= e=> {
-    // console.log('datum');
     let INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
     let GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
     e.preventDefault();
