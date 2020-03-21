@@ -10,7 +10,6 @@ exports.all= async(req,res)=> {
         let rooms= await Room.all();
         let dentists= await User.find('role','dentist');
         let appointments= await Appointment.all();
-        console.log(appointments);
         res.render('appointments.ejs',{appointments:appointments,rooms:rooms,dentists:dentists});
     }catch(err) {
         console.log(err);

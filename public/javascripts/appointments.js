@@ -34,13 +34,13 @@ let show_form=(calendar,date)=> {
     $dentist_modal.modal('show');
   }else if(isUserLoggedIn()) {
     console.log(date);
-    $date_from= $('#select_appointment_date_from');
-    $date_to= $('#select_appointment_date_end_time');
-    Globals.userTimeFrom.val(moment(date).format(Globals.INVERT_FORMAT));
-    Globals.userTimeFrom.data('good_format',moment(date).format(Globals.GOOD_FORMAT));
-    let HalfHourAfter= moment(date).add(moment.duration(0.5,'hour'));
-    Globals.userTimeTo.val(HalfHourAfter.format(Globals.INVERT_FORMAT));    
-    Globals.userTimeTo.data('good_format',HalfHourAfter.format(Globals.GOOD_FORMAT));
+    Globals.userTimeFromVisible.val(moment(date).format(Globals.INVERT_FORMAT));
+    // $date_to= $('#select_appointment_date_end_time').val(moment(date).format(Globals.INVERT_FORMAT));
+    // Globals.userTimeFrom.val(moment(date).format(Globals.INVERT_FORMAT));
+    // Globals.userTimeFrom.data('good_format',moment(date).format(Globals.GOOD_FORMAT));
+    // let HalfHourAfter= moment(date).add(moment.duration(0.5,'hour'));
+    // Globals.userTimeTo.val(HalfHourAfter.format(Globals.INVERT_FORMAT));    
+    // Globals.userTimeTo.data('good_format',HalfHourAfter.format(Globals.GOOD_FORMAT));
     Globals.singleTimeModal.trigger('focus');
     Globals.singleTimeModal.modal('show');
   }
@@ -172,6 +172,8 @@ document.addEventListener("DOMContentLoaded", function() {
 window.onload= ()=> {
   //  Selectors for user time modal
   Globals.singleTimeModal= $('#single_time_modal');
+  Globals.singleTimeModalForm= $('#single_time_modal_form');
+  Globals.userTimeFromVisible= $('#select_appointment_date_from_visible')
   Globals.userTimeFrom= $('#select_appointment_date_from');
   Globals.userTimeTo= $('#select_appointment_date_end_time');
 
@@ -183,7 +185,6 @@ window.onload= ()=> {
   Globals.GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
 
   //Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
-  $('#appointment_btn').click((e)=> appointmentInsertValidate(e));
-  console.error('usao ovdje');
+  $('#appointment_btn').click((e)=> submitAppointmentModal(e));
   initializeDatetimePicker();
 }

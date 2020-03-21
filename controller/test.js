@@ -10,12 +10,9 @@ exports.home= (req,res)=> {
 exports.loggedIn= (req,res)=> {
     response.setHeaders(res);
     res.statusCode= 200;
-    console.log(res);
     res.end(JSON.stringify({message:'logged In'}));
 }
 
 exports.async= async(req,res)=> {
     let user= await User.all();
-    console.log(`User: ${JSON.stringify(user)}`);
-    console.log("Asinhrono je");
 }

@@ -17,8 +17,15 @@ let dt_pick_conf= {
 }
 
 let initializeDatetimePicker= ()=> {
-  console.info("u appointment si");
-  $date=Globals.userTimeFrom.datetimepicker(dt_pick_conf);
+  $date=Globals.userTimeFromVisible.datetimepicker(dt_pick_conf).on('dp.change',e=> {
+    console.log(e);
+  });
+  //  Handle changing datetimepicker date
+  $date.on('change', function(e) {
+    Globals.userTimeFromVisible.val(moment(e.target.value).format(Globals.INVERT_FORMAT));
+
+    console.log('Promjenjeno je ');
+  });
 
     $('#select_working_date').datetimepicker(dt_pick_conf);
 

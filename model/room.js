@@ -60,7 +60,6 @@ const RoomModel= {
                 SET name=?
                 WHERE id=?
             `;
-            console.log(query);
             conn.query(query,[data.name,id],(err,result)=> {
                 if(err) {
                     rej(err);

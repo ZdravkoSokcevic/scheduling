@@ -83,15 +83,3 @@ body {
   margin-left: 20px;
   color:#af2000;
 }
-
-.fc-row {
-  max-height: 60px;
-}
-
-.table-bordered {
-  max-height: 60px;
-}
-
-.fc-week {
-  max-height: 60px;
-}

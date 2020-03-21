@@ -4,9 +4,7 @@ const response= require('./response');
 
 
 exports.all= async(req,res)=> {
-    console.log('Tu si');
     let rooms= await Room.all();
-    console.log(`Rooms: ${JSON.stringify(rooms)}`);
     if(rooms)
         res.render('room.ejs',{rooms:rooms});
     res.redirect('/index');

@@ -26,7 +26,6 @@ exports.auth= (req,res)=> {
     return new Promise(resolve=> {
         user= this.getUser(req,res).then(user=> {
             let loggedIn= Object.assign({},user);
-            // console.log(`Auth: ${user}`);
                 resolve(loggedIn);
         }).catch(rejected=> {
             resolve(false);
@@ -40,7 +39,6 @@ exports.admin= (req,res)=> {
             if(auth==false) {
                 resolve(false);
             }else {
-                // console.log(`Auth ${JSON.stringify(auth)}`);
                 if(auth.role=='admin') {
                     let user={};
                     resolve(auth);
@@ -106,17 +104,11 @@ exports.getUser= async(req,res)=> {
     // // return user;
     //     try {
     //         let bearer= req.header('Authorization');
-    //         console.log(`Bearer: ${bearer}`);
     //         let secret= process.env.JWT_SECRET;
     //         let token_data=jwt.decode(bearer);
-    //         console.log(`Token parsed ${JSON.stringify(token_data)}`);
     //         User.findById(token_data.id).then(user=> {
-    //             // console.log(`User ${JSON.stringify(user)}`);
-    //             // console.log(`Razlicito od null ${user!==null}`);
     //             if(user!==null) {
-    //                 // console.log(`User ${JSON.stringify(user)}`);
     //                 let logged= Object.assign({},user);
-    //                 // console.log(`logged ${JSON.stringify(logged)}`);
     //                 resolve(logged);
     //             }else {
     //                 // response.unauthorized(res);
@@ -125,17 +117,13 @@ exports.getUser= async(req,res)=> {
     //         });
     //     }catch(e) {
     //         rejection(false);
-    //         console.log(`U catch ${e}`);
     //         response.unauthorized(res);
     //     }
     // });
-    console.log('Sesija');
-    console.log(req.session);
     return new Promise(async(res,rej)=> {
-        if(req.session && req.session.user !== 'undefined' && typeof req.session.user!=='undefined')
+        if(req.session!=='undefined' && req.session && req.session.user !== 'undefined' && typeof req.session.user!=='undefined')
         {
             let user= await User.findById(req.session.user.id);
-            // console.log(`User: ${JSON.stringify(user)}`);
             if(user!==null)
                 res(user);
             else rej(false);
@@ -153,12 +141,10 @@ exports.login= async(req,res)=> {
         res.redirect('/login');
     else {
         let user= await User.findOne('email', data.email);
-        console.log(user);
         if(typeof user=='undefined' || !user)
             res.redirect('/login');
         else {
             let match= await bcrypt.compare(data.password, user.password);
-            console.log(`Sifra tacna: ${match}`);
             if(!match) {
                 req.flash('code',200);
                 req.flash('message','Pogresno korisnicko ime ili lozinka');
@@ -178,11 +164,8 @@ exports.login= async(req,res)=> {
                     last_name: user.last_name,
                     role: user.role
                 }
-                // console.log(usr_obj);
                 // res.locals.user= usr_obj;
                 req.session.user= usr_obj;
-                console.log('sesija u login');
-                console.log(req.session);
 
                 res.render('index.ejs',{user:req.session.user,announcements:announcements});
             }

@@ -5,7 +5,6 @@ const response= require('../controller/response');
 
 router.get('/',(req, res, next)=> {
     auth.auth(req, res).then(authenticated=> {
-        // console.log(`authenticated ${authenticated}`);
         if(authenticated) {
             next();
         }else {
@@ -17,10 +16,7 @@ router.get('/',(req, res, next)=> {
 
 // Only admins
 router.get('/all',(req, res, next)=> {
-    console.log(`U middleware`);
     auth.admin(req, res).then(user=> {
-        console.log(`Response u middleware ${JSON.stringify(user)}`);
-        console.log(`User ${JSON.stringify(user)}`);
         let isAdmin= (user.role=='admin');
         if(isAdmin) {
             return next();
@@ -72,14 +68,10 @@ router.delete('/:id',(req, res, next)=> {
 // Can only self account to modify
 router.post('/patch/:id',(req, res, next)=> {
     auth.admin(req, res).then(isAdmin=> {
-        console.log(`Is admin ${JSON.stringify(isAdmin)}`);
-        console.log(`admin ${isAdmin}`);
         if(isAdmin) {
             next();
         }else {
             auth.auth(req, res).then(user=> {
-                console.log(`Is user: ${JSON.stringify(user)}`)
-                console.log(`Iz equals ${user.id== req.params.id}`)
                 if(!user) {
                     response.unauthorized(res);
                 }else if(user.id== req.params.id) {

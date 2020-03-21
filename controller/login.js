@@ -7,15 +7,12 @@ const user= require('../model/user');
 const response= require('./response');
 
 exports.login= (req,res)=> {
-    // console.log('username' in req.body);
     this.validate(req,res);
     let username= req.body.username;
     let password= req.body.password;
     user.findOne('username',username).then(user=> {
-        console.log(`user ${JSON.stringify(user)}`);
         if(user!==null && user!==[] && user!==undefined) {
             let equalPass= bcrypt.compareSync(password,user.password);
-            // console.log(`Sifre ${equalPass}`);
             if(equalPass) {
                 // ToDo Generate JWT
                 delete user.password;

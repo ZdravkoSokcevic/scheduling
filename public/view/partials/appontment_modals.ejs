@@ -52,7 +52,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="/appointment/request" method="POST">
+        <form action="/appointment/request" method="POST" id="single_time_modal_form">
           <div class="form-group">
             <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
             <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id">
@@ -65,8 +65,9 @@
           <div class="form-row">
             <div class="form-group col-10">
               <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
-              <input class="form-control" id="select_appointment_date_from" name="date_from_date" readonly>
-              <input type="text" id="select_appointment_date_end_time" name="date_to_date" hidden>
+              <input class="form-control" type="text" id="select_appointment_date_from_visible" name="date_from_visible" readonly data-date-format="DD MMMM YYYY">
+              <input class="form-control" id="select_appointment_date_from" name="date_from" hidden>
+              <input type="text" id="select_appointment_date_end_time" name="date_to" hidden>
             </div>
             <div class="form-group col-2">
                 <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
@@ -82,12 +83,6 @@
     </div>
   </div>
 </div>
-<!-- Hidden form for single time modal -->
-<form action="" hidden>
-  <input type="text" name="dentist_id" id="hidden_dentist_id" hidden>
-  <input type="text" name="date_from" id="hidden_date_from" hidden>
-  <input type="text" name="date_to" id="hidden_date_to" hidden>
-</form>
 
 <!-- Appointment accept or deny 
 Doctor only -->
