@@ -6,6 +6,14 @@ const response= require('../controller/response');
 const Auth= require('./auth');
 
 exports.all= async(req,res)=> {
+    /**
+     * ----------------------------------------------------------------
+     *  Ovdje treba provjera zavisno od role korisnika
+     *  Ako je doktor u pitanju pokazati mu i pending,
+     *  ako je admin onda pokazati sve,
+     *  a ako je korisnik pokazati mu samo odobrene
+     * ----------------------------------------------------------------
+     */
     try{
         let rooms= await Room.all();
         let dentists= await User.find('role','dentist');
@@ -134,6 +142,21 @@ exports.request= (req,res)=> {
 
     }
     User.findById()
+}
+
+exports.isDentistFreeCheck= async(req,res)=> {
+    res.setHeader('Content-Type','application/json');
+    let obj= {};
+    console.log(req.body);
+    Object.assign(obj,{date_from, date_to, dentist_id}= req.body);
+    if(date_from==undefined || date_to==undefined || dentist_id==undefined || isNaN(parseInt(dentist_id,10))) {
+        res.end(JSON.stringify({message:false}));
+    }
+    let free= await Appointment.checkDentistFreeTermin(obj);
+    // console.log(`Free: ${free}`);
+    if(free)
+        res.end(JSON.stringify({message:true}));
+    else res.end(JSON.stringify({message:false}));
 }
 
 exports.allJson= async(req,res)=> {

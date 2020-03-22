@@ -42,10 +42,8 @@
 		document.getElementsByClassName('user_info')[0].style.display = 'block';
 		let user = JSON.parse(localStorage.getItem('loggedIn'));
 		if (user) {
-			console.log(user);
 			document.getElementsByClassName('user_info')[0].innerHTML = user.email;
 		}
-		console.log(user);
 	}
 	if (isAdminLoggedIn() || isDentistLoggedIn())
 		document.getElementsByClassName('rooms_list')[0].style.display = 'block';
@@ -53,7 +51,6 @@
 	if(isGuest()) 
 		document.getElementsByClassName('fa-sign-out-alt')[0].style.display= 'none';
 
-	console.log($('.fa-sign-out-alt'));
 	$('.fa-sign-out-alt').click((e)=> {
 		if(isUserLoggedIn()) 
 		{

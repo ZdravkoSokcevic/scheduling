@@ -22,8 +22,8 @@ let initializeDatetimePicker= ()=> {
   });
   //  Handle changing datetimepicker date
   $date.on('change', function(e) {
-    Globals.userTimeFromVisible.val(moment(e.target.value).format(Globals.INVERT_FORMAT));
-
+    // Globals.userTimeFromVisible.val(moment(e.target.value).format(Globals.INVERT_FORMAT));
+    checkIsDentistFree(e);
     console.log('Promjenjeno je ');
   });
 

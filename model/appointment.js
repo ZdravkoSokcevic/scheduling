@@ -31,10 +31,6 @@ const Appointment= {
                 appointments(date_from, date_to, dentist_id, patient_id, room_id, status) 
                 VALUES(?, ?, ?, ?, ?, ?)
             `;
-            // console.log(`INSERT 
-            //             INTO 
-            //             appointments(date_from, date_to, dentist_id, patient_id, room_id, status) 
-            //             VALUES(${data.date_from}, ${data.date_to}, ${data.dentist_id}, ${data.patient_id}, ${data.room_id}, ${data.status})`);
             if(!'room_id' in data)
                 data.room_id=null;
             conn.query(query,[data.date_from, data.date_to, data.dentist_id, data.patient_id, data.room_id, data.status],(error,result)=> {
@@ -83,6 +79,30 @@ const Appointment= {
                 });
             }
         });
+    },
+    checkDentistFreeTermin:(data)=> {
+        return new Promise((res,rej)=> {
+            if((!'date_from' in data) || (!'date_to' in data) || (!'dentist_id' in data))
+                res(false); 
+            // convert dates to javascript date object
+            let date_from= new Date(data.date_from);
+            let date_to= new Date(data.date_to);
+            let {dentist_id} = data;
+            let query= `
+                SELECT *
+                FROM appointments
+                WHERE (date_from >= ?)
+                AND (date_to <= ?)
+                AND dentist_id=?
+            `;
+            conn.query(query,[date_from,date_to,dentist_id], (err,result)=> {
+                if(err)
+                    throw new Error(err);
+                else if(result==[] || result== null || !result.length)
+                    res(true);
+                else res(false);
+            });
+        })
     }
 }
 

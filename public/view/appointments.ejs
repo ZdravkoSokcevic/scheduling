@@ -31,12 +31,20 @@
 			doctor_lname: '<%- appointment.doctor_lname %>',
 			doctor_role: '<%- appointment.doctor_role %>',
 			doctor_phone: '<%- appointment.doctor_phone %>',
-			doctor_email: '<%- appointment.doctor_email %>'
+			doctor_email: '<%- appointment.doctor_email %>',
+			color: 'blue'
 		};
 		all_ev.push(single);
-		console.log(all_ev);
 	</script>
 <% }); %>
+
+<script>
+	let fillEvents= (calendar)=> {
+		all_ev.forEach(element=> {
+			calendar.addEvent(element);
+		});	
+	}
+</script>
 
 <div class="container my-5">
   <div class="row">

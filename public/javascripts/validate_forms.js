@@ -6,7 +6,7 @@ let appointmentInsertValidate= e=> {
     console.log('Validacija');
 }
 
-let submitAppointmentModal= e=> {
+let fillNeccessaryDates= e=> {
     let INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
     let GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
     // e.preventDefault();
@@ -21,17 +21,32 @@ let submitAppointmentModal= e=> {
         from.val(moment_date_from.format(GOOD_FORMAT));
         let halfHourBehind= moment_date_from.add(moment.duration(0.5, 'hour')).format(GOOD_FORMAT);
         to.val(halfHourBehind);
-        console.error('tu si');
-        // console.log($(Globals.singleTimeModalForm[0]));
-        $('#single_time_modal_form').submit(function() {
-            console.log('submitted');
-        });
-        // $(e.target).submit();
-        // Globals.singleTimeModalForm.submit();
-        // Globals.singleTimeModal.hide();
-    }else {
-        // error handling
     }
+}
+let submitAppointmentModal= e=> {
+    fillNeccessaryDates(e);
+    Globals.singleTimeModalForm.unbind('submit').submit();
+
+}
+
+let checkIsDentistFree= (e)=> {
+    fillNeccessaryDates(e);
+    let data= {
+        date_from: $('#select_appointment_date_from').val(),
+        date_to: $('#select_appointment_date_end_time').val(),
+        dentist_id: document.getElementById('dentist_select').value
+    }
+    $.ajax({
+        type: "POST",
+        url: "/appointment/checkTermin",
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if(!response.message) 
+                Globals.appointmentButton.prop('disabled', true);
+            else Globals.appointmentButton.prop('disabled', false);
+        }
+    });
 }
 
 let appointmentInsertValidateAndShow= (e)=> {

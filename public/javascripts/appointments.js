@@ -35,12 +35,6 @@ let show_form=(calendar,date)=> {
   }else if(isUserLoggedIn()) {
     console.log(date);
     Globals.userTimeFromVisible.val(moment(date).format(Globals.INVERT_FORMAT));
-    // $date_to= $('#select_appointment_date_end_time').val(moment(date).format(Globals.INVERT_FORMAT));
-    // Globals.userTimeFrom.val(moment(date).format(Globals.INVERT_FORMAT));
-    // Globals.userTimeFrom.data('good_format',moment(date).format(Globals.GOOD_FORMAT));
-    // let HalfHourAfter= moment(date).add(moment.duration(0.5,'hour'));
-    // Globals.userTimeTo.val(HalfHourAfter.format(Globals.INVERT_FORMAT));    
-    // Globals.userTimeTo.data('good_format',HalfHourAfter.format(Globals.GOOD_FORMAT));
     Globals.singleTimeModal.trigger('focus');
     Globals.singleTimeModal.modal('show');
   }
@@ -53,18 +47,38 @@ let fetchData= (calendar)=> {
     let data= [];
     let arr= JSON.parse(response);
 
+    console.error('Events api:');
     arr.forEach(appointment=> {
       let object={
           id: appointment.id,
-          title: 'Business Lunch2',
+          title: 'afgdsag', //moment(appointment.date_from).format(Globals.TIME_FORMAT),
           start: appointment.date_from,
           end: appointment.date_to,
-          color:'green',
-          eventColor:'blue'
+          color:'red',
+          eventColor:'red',
+          displayEventTime: false
       }
+      console.log(object);
       calendar.addEvent(object);
     });
   });
+}
+
+let addData= (calendar=false)=> {
+  let ev_arr=[];
+  all_ev.forEach(appointment=> {
+    let object={
+        id: appointment.id,
+        title: 'afgdsag', //moment(appointment.date_from).format(Globals.TIME_FORMAT),
+        start: moment(appointment.date_from).format(Globals.GOOD_FORMAT),
+        end: moment(appointment.date_to).format(Globals.GOOD_FORMAT),
+        color:'blue',
+        eventColor:'blue',
+        displayEventTime: false
+    }
+    ev_arr.push(object);
+  });
+  return ev_arr;
 }
 
 /*
@@ -102,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     selectable: true,
     dropable:true,
     displayEventTime:true,
-    events:all_ev,
+    events: addData(),
     header: {
       right: 'prev,next danas',
       center: 'title',
@@ -157,10 +171,16 @@ document.addEventListener("DOMContentLoaded", function() {
   if(isGuest()) {
     config.editable=false;
   }
-
+  console.error('Config');
+  console.log(config);
   var calendar = new FullCalendar.Calendar(calendarEl, config);
+  Globals.calendar= calendar;
   $('#calendar').attr('fullCalendar',calendar);
-  fetchData(calendar);
+  // Fetch data asynchronous using Ajax
+  //fetchData(calendar);
+  addData(calendar);
+  // console.log(calendar);
+  // fillEvents(calendar);
   calendar.render();
 });
 
@@ -170,19 +190,23 @@ document.addEventListener("DOMContentLoaded", function() {
  * ---------------------------------------------------------------
  */
 window.onload= ()=> {
+  Globals.calendarEl= $('#calendar');
   //  Selectors for user time modal
   Globals.singleTimeModal= $('#single_time_modal');
   Globals.singleTimeModalForm= $('#single_time_modal_form');
   Globals.userTimeFromVisible= $('#select_appointment_date_from_visible')
   Globals.userTimeFrom= $('#select_appointment_date_from');
   Globals.userTimeTo= $('#select_appointment_date_end_time');
-
+  Globals.appointmentButton= $('#appointment_btn');
   Globals.dentistModal= $('#dentist_modal');
+  
   
   // selectors to inver time from user friendly time
   // to backend compatibile time
   Globals.INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
   Globals.GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
+  Globals.TIME_FORMAT= 'HH:mm';
+  Globals.TIME_ICON= '<i fa fa-time></i>'; 
 
   //Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
   $('#appointment_btn').click((e)=> submitAppointmentModal(e));

@@ -55,8 +55,8 @@
         <form action="/appointment/request" method="POST" id="single_time_modal_form">
           <div class="form-group">
             <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
-            <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id">
-              <option disabled selected>Odaberite lekara:</option>
+            <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id" onchange=checkIsDentistFree(this)>
+              <option disabled>Odaberite lekara:</option>
               <% dentists.forEach(dentist=> { %>
                 <option value="<%= dentist.id %>"><%- dentist.first_name+' '+dentist.last_name %></option>
               <% }) %>
