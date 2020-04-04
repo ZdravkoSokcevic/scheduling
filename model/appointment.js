@@ -103,6 +103,63 @@ const Appointment= {
                 else res(false);
             });
         })
+    },
+    unregistered: ()=> {
+        return new Promise((res,rej)=> {
+            let query= `
+                SELECT 
+                    appointments.*,
+                    users.first_name as doctor_first_name
+                    users.last_name as doctor_last_name,
+                    users.email as doctor_email,
+                    users.phone as doctor_phone
+                FROM appointments
+                JOIN users
+                    ON appointments.dentist_id= users.id
+                WHERE 
+                    users.role like 'dentist' 
+                AND 
+                    appointments.status like 'approved'
+            `;
+            conn.query(query,[],(err,fields)=> {
+                if(err)
+                    rej(err);
+                else res(fields);
+            })
+        });
+    },
+    getForUser: user=> {
+        return new Promise((res,rej)=> {
+            Appointment.all().then(result=> {
+                res(result);
+            });
+        });
+    },
+    getForDoctor: doctor=> {
+        return new Promise((res,rej)=> {
+            if(!doctor || doctor==undefined || !'id' in doctor)
+                rej('User is not a doctor');
+            let query= `
+                SELECT 
+                    appointments.*,
+                    users.first_name as doctor_first_name
+                    users.last_name as doctor_last_name,
+                    users.email as doctor_email,
+                    users.phone as doctor_phone
+                    FROM appointments
+                    JOIN users
+                        ON appointments.dentist_id= users.id
+                    WHERE 
+                        appointments.dentist_id= ?
+                    OR 
+                        appointments.status like 'approved';
+            `;
+            conn.query(query, [], (err,data)=> {
+                if(err)
+                    rej(err);
+                else res(data);
+            });
+        });
     }
 }
 

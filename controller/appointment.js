@@ -15,9 +15,18 @@ exports.all= async(req,res)=> {
      * ----------------------------------------------------------------
      */
     try{
+        let user= await Auth.getLoggedIn(req,res);
         let rooms= await Room.all();
         let dentists= await User.find('role','dentist');
-        let appointments= await Appointment.all();
+        let appointments;
+        if(user==undefined)
+            appointments= await Appointment.unregistred();
+        else if(user.role=='admin')
+            appointments= await Appointment.all();
+        else if(user.role=='dentist')
+            appointments= await Appointment.getForDoctor(user);
+        else if(user.role=='patient')
+            appointments= await Appointment.getForUser(user);
         res.render('appointments.ejs',{appointments:appointments,rooms:rooms,dentists:dentists});
     }catch(err) {
         console.log(err);
