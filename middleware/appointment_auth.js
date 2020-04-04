@@ -3,13 +3,13 @@ const auth= require('../controller/auth');
 const Appointment= require('../model/appointment');
 const response= require('../controller/response');
 
-router.get('/all',(req,res,next)=> {
-    if(auth.auth()) {
-        next();
-    }else {
-        response.unauthorized(res);
-    }
-});
+// router.get('/all',(req,res,next)=> {
+//     if(auth.auth()) {
+//         next();
+//     }else {
+//         response.unauthorized(res);
+//     }
+// });
 
 router.post('/insert',(req,res,next)=> {
     if(auth.admin()) {

@@ -66,6 +66,15 @@ let fetchData= (calendar)=> {
 
 let addData= (calendar=false)=> {
   let ev_arr=[];
+  // loggedInUser
+  let user= getUser();
+  if(user==null) {
+    user= {};
+    user.role= 'guest';
+  }
+  Globals.pendingColor= '#0000aa';
+  Globals.approvedColor= '#05ff05';
+  Globals.unapprovedColor= '#ff0505';
   all_ev.forEach(appointment=> {
     let object={
         id: appointment.id,
@@ -74,8 +83,57 @@ let addData= (calendar=false)=> {
         end: moment(appointment.date_to).format(Globals.GOOD_FORMAT),
         color:'blue',
         eventColor:'blue',
-        displayEventTime: false
+        displayEventTime: false,
+        status: appointment.status
     }
+    switch(user.role)
+    {
+      case 'admin':
+      {
+        if(object.status=='pending' || object.status=='')
+            object.color= object.eventColor= Globals.pendingColor;
+        else if(object.status== 'approved')
+          object.color= object.eventColor= Globals.approvedColor;
+        else if(object.status== 'unapproved')
+          object.color= object.eventColor= Globals.unapprovedColor;
+        else object.color= 'blue';
+        break;
+      }
+      case 'dentist':
+      {
+        if(object.status=='pending' || object.status=='')
+        object.color= object.eventColor= Globals.pendingColor;
+        else if(object.status== 'approved')
+          object.color= object.eventColor= Globals.approvedColor;
+        else if(object.status== 'unapproved')
+          object.color= object.eventColor= Globals.unapprovedColor;
+        else object.color= 'blue';
+        break;
+      }
+      case 'patient':
+      {
+        if(object.status=='pending' || object.status=='')
+          object.color= object.eventColor= Globals.pendingColor;
+        else if(object.status== 'approved')
+          object.color= object.eventColor= Globals.approvedColor;
+        else if(object.status== 'unapproved')
+          object.color= object.eventColor= Globals.unapprovedColor;
+        else object.color= 'blue';
+        break;
+      }
+      case 'guest': 
+      {
+        if(object.status=='pending' || object.status=='')
+          object.color= object.eventColor= Globals.pendingColor;
+        else if(object.status== 'approved')
+          object.color= object.eventColor= Globals.approvedColor;
+        else if(object.status== 'unapproved')
+          object.color= object.eventColor= Globals.unapprovedColor;
+        else object.color= 'blue';
+        break;
+      }
+    }
+    console.log(object);
     ev_arr.push(object);
   });
   return ev_arr;
@@ -178,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
   $('#calendar').attr('fullCalendar',calendar);
   // Fetch data asynchronous using Ajax
   //fetchData(calendar);
-  addData(calendar);
+  //addData(calendar);
   // console.log(calendar);
   // fillEvents(calendar);
   calendar.render();
@@ -207,6 +265,8 @@ window.onload= ()=> {
   Globals.GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
   Globals.TIME_FORMAT= 'HH:mm';
   Globals.TIME_ICON= '<i fa fa-time></i>'; 
+
+
 
   //Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
   $('#appointment_btn').click((e)=> submitAppointmentModal(e));

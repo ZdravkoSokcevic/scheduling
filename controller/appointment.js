@@ -15,12 +15,12 @@ exports.all= async(req,res)=> {
      * ----------------------------------------------------------------
      */
     try{
-        let user= await Auth.getLoggedIn(req,res);
+        let user= await Auth.getUser(req,res);
         let rooms= await Room.all();
         let dentists= await User.find('role','dentist');
         let appointments;
-        if(user==undefined)
-            appointments= await Appointment.unregistred();
+        if(user==undefined || !user)
+            appointments= await Appointment.unregistered();
         else if(user.role=='admin')
             appointments= await Appointment.all();
         else if(user.role=='dentist')

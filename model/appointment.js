@@ -2,20 +2,32 @@ const conn= require('./database');
 const User= require('./user');
 
 const Appointment= {
+    listData: `
+        a.*,
+        u.id as user_id,
+        u.first_name as user_fname,
+        u.last_name as user_lname,
+        u.email as user_email,
+        u.role as user_role,
+        u.phone as user_phone,
+        d.id as doctor_id,
+        d.first_name as doctor_fname,
+        d.last_name as doctor_lname,
+        d.email as doctor_email,
+        d.role as doctor_role,
+        d.phone as doctor_phone
+    `,
     all:()=> {
         return new Promise((res,rej)=> {
             let query=`
-                SELECT appointments.*,
-                    users.id as user_id,
-                    users.first_name as doctor_fname,
-                    users.last_name as doctor_lname,
-                    users.email as doctor_email,
-                    users.role as doctor_role,
-                    users.phone as doctor_phone
-                FROM appointments
-                JOIN users 
-                    ON appointments.dentist_id=users.id
-                WHERE users.role like 'dentist'
+                SELECT
+                    ${Appointment.listData}
+                FROM appointments a
+                JOIN users d
+                    ON a.dentist_id= d.id
+                JOIN users u
+                    ON a.patient_id= u.id
+                WHERE d.role like 'dentist'
             `;
             conn.query(query,(error,data)=> {
                 if(error) throw new Error(error);
@@ -108,18 +120,16 @@ const Appointment= {
         return new Promise((res,rej)=> {
             let query= `
                 SELECT 
-                    appointments.*,
-                    users.first_name as doctor_first_name
-                    users.last_name as doctor_last_name,
-                    users.email as doctor_email,
-                    users.phone as doctor_phone
-                FROM appointments
-                JOIN users
-                    ON appointments.dentist_id= users.id
+                    ${Appointment.listData}
+                FROM appointments a
+                JOIN users d
+                    ON a.dentist_id= d.id
+                JOIN users u
+                    ON a.patient_id= u.id
                 WHERE 
-                    users.role like 'dentist' 
+                    d.role like 'dentist' 
                 AND 
-                    appointments.status like 'approved'
+                    a.status like 'approved'
             `;
             conn.query(query,[],(err,fields)=> {
                 if(err)
@@ -130,8 +140,25 @@ const Appointment= {
     },
     getForUser: user=> {
         return new Promise((res,rej)=> {
-            Appointment.all().then(result=> {
-                res(result);
+            if(!user || !'id' in user)
+                rej('Bad data');
+            let query=`
+                SELECT
+                    ${Appointment.listData}
+                FROM appointments a
+                JOIN users d
+                    ON a.dentist_id= d.id
+                JOIN users u
+                    ON a.patient_id= u.id
+                WHERE
+                    u.id= ?
+                OR
+                    a.status like 'approved'
+            `;
+            conn.query(query, [user.id], (err,fields)=> {
+                if(err)
+                    rej(err);
+                else res(fields);
             });
         });
     },
@@ -141,20 +168,18 @@ const Appointment= {
                 rej('User is not a doctor');
             let query= `
                 SELECT 
-                    appointments.*,
-                    users.first_name as doctor_first_name
-                    users.last_name as doctor_last_name,
-                    users.email as doctor_email,
-                    users.phone as doctor_phone
-                    FROM appointments
-                    JOIN users
-                        ON appointments.dentist_id= users.id
-                    WHERE 
-                        appointments.dentist_id= ?
-                    OR 
-                        appointments.status like 'approved';
+                    ${Appointment.listData}
+                FROM appointments a
+                JOIN users d
+                    ON a.dentist_id= d.id
+                JOIN users u
+                    ON a.patient_id= u.id
+                WHERE 
+                    d.id= ?
+                OR 
+                    a.status like 'approved';
             `;
-            conn.query(query, [], (err,data)=> {
+            conn.query(query, [doctor.id], (err,data)=> {
                 if(err)
                     rej(err);
                 else res(data);

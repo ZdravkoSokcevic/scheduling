@@ -126,9 +126,9 @@ exports.getUser= async(req,res)=> {
             let user= await User.findById(req.session.user.id);
             if(user!==null)
                 res(user);
-            else rej(false);
+            else res(false);
         }else {
-            rej(false);
+            res(false);
         }
     });
 
