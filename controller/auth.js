@@ -120,15 +120,15 @@ exports.getUser= async(req,res)=> {
     //         response.unauthorized(res);
     //     }
     // });
-    return new Promise(async(res,rej)=> {
-        if(req.session!=='undefined' && req.session && req.session.user !== 'undefined' && typeof req.session.user!=='undefined')
+    return new Promise(async(resolve,rej)=> {
+        if(req && req.session!==undefined && req.session && req.session.user !== undefined && typeof req.session.user!=='undefined')
         {
             let user= await User.findById(req.session.user.id);
             if(user!==null)
-                res(user);
-            else res(false);
+                resolve(user);
+            else resolve(false);
         }else {
-            res(false);
+            resolve(false);
         }
     });
 

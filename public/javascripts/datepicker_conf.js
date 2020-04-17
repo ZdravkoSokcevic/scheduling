@@ -17,14 +17,32 @@ let dt_pick_conf= {
 }
 
 let initializeDatetimePicker= ()=> {
-  $date=Globals.userTimeFromVisible.datetimepicker(dt_pick_conf).on('dp.change',e=> {
+  $patientModalDate= Globals.userTimeFromVisible.datetimepicker(dt_pick_conf).on('dp.change',e=> {
     console.log(e);
   });
+  
+  $patientModalEditDate= Globals.userEditTimeFromVisible.datetimepicker(dt_pick_conf);
+  $patientModalEditDate.on('change', e=> {
+    let data= {
+      visible: Globals.userEditTimeFromVisible,
+      from: Globals.userEditTimeFrom,
+      to: Globals.userEditTimeTo,
+      dentist_id: $('#dentist_select_edit'),
+      submitButton: $('#appointment_edit_btn')     
+    }
+    checkIsDentistFree(e, data);
+
+  });
   //  Handle changing datetimepicker date
-  $date.on('change', function(e) {
-    // Globals.userTimeFromVisible.val(moment(e.target.value).format(Globals.INVERT_FORMAT));
-    checkIsDentistFree(e);
-    console.log('Promjenjeno je ');
+  $patientModalDate.on('change', function(e) {
+    let data= {
+      visible: Globals.userTimeFromVisible,
+      from: Globals.userTimeFrom,
+      to: Globals.userTimeTo,
+      dentist_id: $('#dentist_select'),
+      submitButton: $('#appointment_btn')
+    }
+    checkIsDentistFree(e, data);
   });
 
     $('#select_working_date').datetimepicker(dt_pick_conf);

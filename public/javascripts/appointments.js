@@ -33,10 +33,9 @@ let show_form=(calendar,date)=> {
     $dentist_modal.trigger('focus');
     $dentist_modal.modal('show');
   }else if(isUserLoggedIn()) {
-    console.log(date);
     Globals.userTimeFromVisible.val(moment(date).format(Globals.INVERT_FORMAT));
-    Globals.singleTimeModal.trigger('focus');
-    Globals.singleTimeModal.modal('show');
+    Globals.userAppointmentModal.trigger('focus');
+    Globals.userAppointmentModal.modal('show');
   }
 }
 let fetchData= (calendar)=> {
@@ -58,7 +57,6 @@ let fetchData= (calendar)=> {
           eventColor:'red',
           displayEventTime: false
       }
-      console.log(object);
       calendar.addEvent(object);
     });
   });
@@ -83,6 +81,8 @@ let addData= (calendar=false)=> {
         end: moment(appointment.date_to).format(Globals.GOOD_FORMAT),
         color:'blue',
         eventColor:'blue',
+        user_id: appointment.user_id,
+        user_role: appointment.user_role,
         displayEventTime: false,
         status: appointment.status
     }
@@ -133,7 +133,6 @@ let addData= (calendar=false)=> {
         break;
       }
     }
-    console.log(object);
     ev_arr.push(object);
   });
   return ev_arr;
@@ -156,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
     currentView='day';
   }
   let handleDateSelected= (date)=> {
-    console.log(`selektovao si ${date.startStr}`);
+    // console.log(`selektovao si ${date.startStr}`);
   }
 
 /*
@@ -191,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function() {
         text: 'Mesecni prikaz',
         backgroundColor: '#048698',
         click: ()=> {
-          console.log('tu si');
           if(currentView=='day') {
             calendar.changeView('dayGridMonth');
             calendar.render();
@@ -214,26 +212,49 @@ document.addEventListener("DOMContentLoaded", function() {
     select: (date)=> {
       handleDateSelected(date);
     },
-    eventClick: (event, element)=> {
-      if(isDentistLoggedIn())
-      {
-      }else if(isUserLoggedIn()) {
+    ///////////////////////////////////////////////////////
+    // Event click not working here, documentation failed
+    ///////////////////////////////////////////////////////
+    // eventClick: (element, jsEvent, view)=> {
+    //   console.log(view);
+    //   if(isDentistLoggedIn())
+    //   {
+    //   }else if(isUserLoggedIn()) {
 
-      }else {
-        //guest, redirect to login
-        window.location.href='/login';
-      }
-    }
+    //   }else {
+    //     //guest, redirect to login
+    //     window.location.href='/login';
+    //   }
+    // }
   }
 
   if(isGuest()) {
     config.editable=false;
   }
-  console.error('Config');
   console.log(config);
   var calendar = new FullCalendar.Calendar(calendarEl, config);
   Globals.calendar= calendar;
   $('#calendar').attr('fullCalendar',calendar);
+
+  /**
+   * ---------------------------------------------------
+   *  Handle user click on event
+   * ---------------------------------------------------
+   */
+  calendar.on('eventClick', async(e)=> {
+    let event= e.event;
+    let eventInfo= e.event.extendedProps;
+    let loggedIn= getUser();
+    if(loggedIn== null)
+      return;
+    
+    if(loggedIn.role == 'patient') {
+      if(loggedIn.id != eventInfo.user_id)
+        return;
+      
+      showUserEditModal(event);
+    }
+  });
   // Fetch data asynchronous using Ajax
   //fetchData(calendar);
   //addData(calendar);
@@ -250,13 +271,24 @@ document.addEventListener("DOMContentLoaded", function() {
 window.onload= ()=> {
   Globals.calendarEl= $('#calendar');
   //  Selectors for user time modal
-  Globals.singleTimeModal= $('#single_time_modal');
-  Globals.singleTimeModalForm= $('#single_time_modal_form');
+  Globals.userAppointmentModal= $('#user_appointment_modal');
+  Globals.userAppointmentModalForm= $('#user_appointment_modal_form');
   Globals.userTimeFromVisible= $('#select_appointment_date_from_visible')
   Globals.userTimeFrom= $('#select_appointment_date_from');
   Globals.userTimeTo= $('#select_appointment_date_end_time');
+  //  Selectors user edit modal
+  Globals.userAppointmentEditModal= $('#user_appointment_edit_modal');
+  Globals.userAppointmentEditModalForm= $('#user_appointment_edit_modal_form');
+  Globals.userEditTimeFromVisible= $('#user_appointment_edit_from_visible');
+  Globals.userEditTimeFrom= $('#user_appointment_edit_date_from');
+  Globals.userEditTimeTo= $('#user_appointment_edit_date_to');
+
   Globals.appointmentButton= $('#appointment_btn');
   Globals.dentistModal= $('#dentist_modal');
+
+  Globals.adminWorkingTimeModal= $();
+  Globals.adminWorkingTimeModalForm= $();
+
   
   
   // selectors to inver time from user friendly time
@@ -268,7 +300,17 @@ window.onload= ()=> {
 
 
 
-  //Globals.singleTimeModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
+  //Globals.userAppointmentModal.on('show.bs.modal',(e)=> appointmentInsertValidateAndShow(e));
   $('#appointment_btn').click((e)=> submitAppointmentModal(e));
+  $('#appointment_edit_btn').click((e)=> submitAppointmentEditModal(e));
   initializeDatetimePicker();
+}
+
+let showUserEditModal= event => {
+  Globals.userAppointmentEditModal.trigger('focus');
+  Globals.userAppointmentEditModal.modal('show');
+  let time_from= moment(event.start);
+  Globals.userEditTimeFromVisible.val(time_from.format(Globals.INVERT_FORMAT));
+
+  
 }

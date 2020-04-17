@@ -131,14 +131,15 @@ let UserModel = {
             }
         });
     },
-    searchOrAll:(data)=> {
+    searchOrAll:(data, loggedInId)=> {
         return new Promise((res,rej)=> {
-            if(!('search' in data) && !('role' in data)) {
+            if((!('search' in data) || data.search=='') && (!('role' in data) || data.role=='')) {
                 let query= `
                     SELECT *
                     FROM users 
+                    WHERE users.id <> ?
                 `;
-                conn.query(query,(err,users)=> {
+                conn.query(query, [loggedInId], (err,users)=> {
                     if(err) throw err;
                     else {
                         res(users);
@@ -151,13 +152,14 @@ let UserModel = {
                     let query=`
                         SELECT *
                         FROM users
-                        WHERE
+                        WHERE users.id <> ? AND (
                             first_name like ?
                             OR last_name like ?
                             OR email like ?
+                        )
                     `;
-                    let data_search=['%'+data.search+'%','%'+data.search+'%','%'+data.search+'%'];
-                    conn.query(query,data_search,(err,users)=> {
+                    let search= '%' + data.search + '%';
+                    conn.query(query,[loggedInId, search, search, search],(err,users)=> {
                         if(err) throw new Error('Something wen\'t wrong');
                         else {
                             res(users);
@@ -172,14 +174,103 @@ let UserModel = {
                             first_name like ?
                             OR last_name like ?
                             OR email like ?
-                        ) 
+                        ) AND id <> ? 
                     `;
-                    let data_search=[data.role,'%'+data.search+'%','%'+data.search+'%','%'+data.search+'%'];
+                    let data_search=[data.role,'%'+data.search+'%','%'+data.search+'%','%'+data.search+'%', loggedInId];
                     conn.query(query,data_search,(err,users)=> {
                         if(err) throw new Error('Something wen\'t wrong');
                         else {
                             res(users);
                         }
+                    });
+                }
+            }
+        });
+    },
+    loadOrSearchPatientsAndDoctors: (data,loggedInId) => {
+        return new Promise(res=> {
+            if((!('search' in data) || data.search=='') && (!('role' in data) || data.role=='')) {
+                let query=`
+                    SELECT *
+                    FROM users
+                    WHERE id <> ? AND (
+                        role like 'patient'
+                        OR role like 'dentist'
+                    )
+                `;
+
+                conn.query(query, [loggedInId], (err, users)=> {
+                    if(err)
+                        throw new Error(err);
+                    else res(users);
+                });
+            }else {
+                let query=`
+                SELECT *
+                FROM users
+                WHERE (
+                    first_name like ?
+                    OR last_name like ?
+                    OR email like ?
+                ) AND role like ?
+                AND (
+                    role like 'patient'
+                    OR role like 'dentist'
+                ) AND users.id <> ?
+                `;
+                let search= '%' + data.search + '%';
+                let role= data.role;
+                conn.query(query, [search, search, search, role, loggedInId], (err,users)=> {
+                    if(err)
+                        throw new Error(err);
+                    else res(users);
+                });
+            }
+        });
+    },
+    loadOrSearchPatients: (data,loggedInId) => {
+        return new Promise((res,rej) => {
+            if((!('search' in data) || data.search== '') && (!('role' in data) || data.role=='')) {
+                let query=`
+                    SELECT *
+                    FROM users
+                    WHERE role like 'patient'
+                    AND id <> ?
+                `;
+                conn.query(query, [loggedInId], (err,users) => {
+                    if(err)
+                        throw new Error(err);
+                    else res(users);
+                });
+            }else {
+                let search= data.search;
+                if(search== '') {
+                    let query=`
+                        SELECT *
+                        FROM users
+                        WHERE role like 'patient'
+                        AND id <> ?;
+                    `;
+                    conn.query(query, [loggedInId], (err,users) => {
+                        if(err)
+                            throw new Error(err.message);
+                        else res(users);
+                    });        
+                }else {
+                    search= '%' + search + '%';
+                    let query=`
+                        SELECT *
+                        FROM users
+                        WHERE role like 'patient' AND (
+                            LOWER(first_name) like LOWER(?)
+                            OR LOWER(last_name) like LOWER(?)
+                            OR LOWER(email) like LOWER(?)
+                        ) AND id <> ?;
+                    `;
+                    conn.query(query, [search, search, search, loggedInId], (err,users) => {
+                        if(err)
+                            throw new Error(err.message);
+                        else res(users);
                     });
                 }
             }

@@ -3,18 +3,18 @@
 
 // Appointment insert form validate
 let appointmentInsertValidate= e=> {
-    console.log('Validacija');
 }
 
-let fillNeccessaryDates= e=> {
+let fillNeccessaryDates= (e, data ) => {
     let INVERT_FORMAT= 'DD-MM-YYYY HH:mm';
     let GOOD_FORMAT= 'MM-DD-YYYY HH:mm';
     // e.preventDefault();
-    let from_visible= $('#select_appointment_date_from_visible');
-    let from= $('#select_appointment_date_from');
-    let to= $('#select_appointment_date_end_time');
-    let date_from_visible= from_visible.val();
-    let date_from= date_from_visible;
+    if(!('visible' in data) || !('from' in data) || !('to' in data))
+        return;
+    let {visible, from, to} = data;
+
+    let from_visible= visible.val();
+    let date_from= from_visible;
     let date_to= to.val();
     if(date_from!==null) {
         let moment_date_from= moment(date_from,INVERT_FORMAT);
@@ -24,29 +24,53 @@ let fillNeccessaryDates= e=> {
     }
 }
 let submitAppointmentModal= e=> {
-    fillNeccessaryDates(e);
-    Globals.singleTimeModalForm.unbind('submit').submit();
-
+    let data= {
+        visible: $('#select_appointment_date_from_visible'),
+        from: $('#select_appointment_date_from'),
+        to: $('#select_appointment_date_end_time')
+    }
+    fillNeccessaryDates(e, data);
+    Globals.userAppointmentModalForm.unbind('submit').submit();
 }
 
-let checkIsDentistFree= (e)=> {
-    fillNeccessaryDates(e);
+let submitAppointmentEditModal= e=> {
     let data= {
-        date_from: $('#select_appointment_date_from').val(),
-        date_to: $('#select_appointment_date_end_time').val(),
-        dentist_id: document.getElementById('dentist_select').value
+        visible: Globals.userEditTimeFromVisible,
+        from: Globals.userEditTimeFrom,
+        to: Globals.userEditTimeTo
+    }
+    fillNeccessaryDates(e, data);
+    Globals.userAppointmentEditModalForm.unbind('submit').submit();
+}
+
+
+let checkIsDentistFree= (e, data)=> {
+    fillNeccessaryDates(e, data);
+    let form_data= {
+        date_from: data.from.val(),
+        date_to: data.to.val(),
+        dentist_id: data.dentist_id.val()
     }
     $.ajax({
         type: "POST",
         url: "/appointment/checkTermin",
-        data: data,
+        data: form_data,
         dataType: "json",
         success: function (response) {
             if(!response.message) 
-                Globals.appointmentButton.prop('disabled', true);
-            else Globals.appointmentButton.prop('disabled', false);
+                data.submitButton.prop('disabled', true);
+            else data.submitButton.prop('disabled', false);
         }
     });
+}
+
+let checkIsDentistFreeEdit= e => {
+    let data= {
+        visible: Globals.userEditTimeFromVisible,
+        from: Globals.userEditTimeFrom,
+        to: Globals.userEditTimeTo
+    }
+    fillNeccessaryDates(e, data);
 }
 
 let appointmentInsertValidateAndShow= (e)=> {

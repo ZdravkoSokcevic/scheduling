@@ -9,6 +9,13 @@
 
 <% include partials/appontment_modals.ejs %>
 
+<% include partials/admin_modals %>
+
+<% include partials/dentist_modals %>
+
+<script src="/javascripts/validate_forms.js"></script>
+<script src="/javascripts/datepicker_conf.js"></script>
+
 <% include partials/scripts.ejs %>
 
 <script src="/javascripts/external/moment.js"></script>
@@ -27,6 +34,8 @@
 			date_from: '<%- appointment.date_from %>',
 			date_to: '<%- appointment.date_to %>',
 			status: '<%- appointment.status %>',
+			user_id: '<%- appointment.user_id %>',
+			user_role: '<%- appointment.user_role %>',
 			doctor_fname: '<%- appointment.doctor_fname %>',
 			doctor_lname: '<%- appointment.doctor_lname %>',
 			doctor_role: '<%- appointment.doctor_role %>',

@@ -60,7 +60,6 @@ exports.loadEditView= async(req,res)=> {
         res.redirect('/room');
     try{
         let room= await Room.findById(id);
-        console.log(JSON.stringify(room));
         if(room)
             res.render('room/edit.ejs',{room:room[0]});
         else res.redirect('/room');
