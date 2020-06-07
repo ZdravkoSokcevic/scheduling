@@ -35,6 +35,13 @@ jwt();
 
 app.use(bodyParser());
 
+/*
+|
+|	SERVING STATIC FILES FROM PUBLIC
+|
+*/
+app.use(express.static('public/'));
+
 
 let sesss={
 	cookie:{},
@@ -67,7 +74,7 @@ app.use('/test', TestRouter);
 app.set('view-engine','ejs');
 // Access static files from public folder
 app.set('views',path.join(__dirname+'/public/view/'));
-app.use(express.static('public/'));
+
 // console.log(process.env);
 app.listen(process.env.APP_PORT, process.env.APP_HOST);
 
