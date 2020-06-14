@@ -119,10 +119,10 @@ exports.request= async(req,res)=> {
             req.flash('message','Nije moguce sacuvati,pokusajte kasnije');
             res.redirect('/appointment');
         }
-
         req.flash('code',200);
         req.flash('message', 'Uspesno ste poslali zahtev.');
         res.redirect('/appointment');
+
     }
 }
 
