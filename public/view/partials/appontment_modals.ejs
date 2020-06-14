@@ -3,45 +3,80 @@
 
 <!-- Appointment insert for Patients  -->
 <div class="modal fade" id="user_appointment_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Zakazite termin:</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="/appointment/request" method="POST" id="user_appointment_modal_form">
-          <div class="form-group">
-            <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
-            <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id">
-              <option disabled>Odaberite lekara:</option>
-              <% dentists.forEach(dentist=> { %>
-                <option value="<%= dentist.id %>"><%- dentist.first_name+' '+dentist.last_name %></option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-10">
-              <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
-              <input class="form-control" type="text" id="select_appointment_date_from_visible" name="date_from_visible" readonly data-date-format="DD MMMM YYYY">
-              <input class="form-control" id="select_appointment_date_from" name="date_from" hidden>
-              <input type="text" id="select_appointment_date_end_time" name="date_to" hidden>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Zakazite termin:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="form-group col-2">
-                <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
+            <div class="modal-body">
+                <form action="/appointment/request" method="POST" id="user_appointment_modal_form">
+                    <div class="form-group">
+                        <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
+                        <select class="custom-select form-control-lg" id="dentist_select" name="dentist_id">
+                            <option disabled>Odaberite lekara:</option>
+                            <% dentists.forEach(dentist=> { %>
+                                <option value="<%= dentist.id %>">
+                                <%- dentist.first_name+' '+dentist.last_name %>    
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-10">
+                          <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
+                            <input 
+                                class="form-control" 
+                                type="text" 
+                                id="select_appointment_date_from_visible" 
+                                name="date_from_visible" 
+                                readonly 
+                                data-date-format="DD MMMM YYYY"
+                            />
+                            <input 
+                                class="form-control"    
+                                id="select_appointment_date_from" 
+                                name="date_from" 
+                                hidden
+                            />
+                            <input 
+                                type="text" 
+                                id="select_appointment_date_end_time" 
+                                name="date_to" 
+                                hidden
+                            />
+                      </div>
+                      <div class="form-group col-2">
+                            <i 
+                                class="fas fa-calendar-times" 
+                                style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"
+                            ></i>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            type="button" 
+                            class="btn btn-secondary" 
+                            data-dismiss="modal"
+                        >
+                            Zatvori
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary" 
+                            name="submit" 
+                            id="appointment_btn"
+                        >
+                            Zakazi termin
+                        </button>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-            <button type="submit" class="btn btn-primary" name="submit" id="appointment_btn">Zakazi termin</button>
-          </div>
-        </form>
-      </div>
 
+        </div>
     </div>
-  </div>
 </div>
 <script>
   let dentist_insert_select = $('#dentist_select');
@@ -52,54 +87,83 @@
       to: Globals.userTimeTo,
       dentist_id: $('#dentist_select'),
       submitButton: $('#appointment_btn')
-    }
-    checkIsDentistFree(this, data)
-    
-  });
+  }
+  checkIsDentistFree(this, data)
+
+});
 </script>
 
 
 <!-- Appointment edit for Patients  -->
 <div class="modal fade" id="user_appointment_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Izmenite termin:</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="/appointment/edit/request" method="POST" id="user_appointment_edit_modal_form">
-          <div class="form-group">
-            <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
-            <select class="custom-select form-control-lg" id="dentist_select_edit" name="dentist_id">
-              <option disabled>Odaberite lekara:</option>
-              <% dentists.forEach(dentist=> { %>
-                <option value="<%= dentist.id %>"><%- dentist.first_name+' '+dentist.last_name %></option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-10">
-              <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
-              <input class="form-control" type="text" id="user_appointment_edit_from_visible" name="date_from_visible" readonly data-date-format="DD MMMM YYYY">
-              <input class="form-control" id="user_appointment_edit_date_from" name="date_from" type="text">
-              <input type="text" id="user_appointment_edit_date_to" name="date_to" hidden>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Izmenite termin:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <div class="form-group col-2">
-                <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
+            <div class="modal-body">
+                <form action="/appointment/edit/request" method="POST" id="user_appointment_edit_modal_form">
+                    <div class="form-group">
+                        <label for="dentist_select" class="col-form-label">Odaberite lekara: </label>
+                        <select class="custom-select form-control-lg" id="dentist_select_edit" name="dentist_id">
+                            <option disabled>Odaberite lekara:</option>
+                            <% dentists.forEach(dentist=> { %>
+                                <option value="<%= dentist.id %>"><%- dentist.first_name+' '+dentist.last_name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-10">
+                            <label for="select_appointment_date_from" class="col-form-label">Termin:</label>
+                            <input 
+                                class="form-control" 
+                                type="text" 
+                                id="user_appointment_edit_from_visible" 
+                                name="date_from_visible" 
+                                readonly 
+                                data-date-format="DD MMMM YYYY"
+                            />
+                            <input 
+                                class="form-control" 
+                                id="user_appointment_edit_date_from" 
+                                name="date_from" 
+                                type="text"
+                            />
+                            <input 
+                                type="text" 
+                                id="user_appointment_edit_date_to" 
+                                name="date_to" 
+                                hidden
+                            />
+                        </div>
+                        <div class="form-group col-2">
+                            <i class="fas fa-calendar-times" style="font-size:2em;margin-top:40px; color:#0d8fa1; margin-left:34%"></i>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            type="button" 
+                            class="btn btn-secondary" 
+                            data-dismiss="modal"
+                        >
+                            Otkazi termin
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary" 
+                            name="submit" 
+                            id="appointment_edit_btn"
+                        >
+                            Zakazi termin
+                        </button>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Otkazi termin</button>
-            <button type="submit" class="btn btn-primary" name="submit" id="appointment_edit_btn">Zakazi termin</button>
-          </div>
-        </form>
-      </div>
-
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -111,16 +175,16 @@
       to: Globals.userEditTimeTo,
       dentist_id: $('#dentist_select_edit'),
       submitButton: $('#appointment_edit_btn')
-    }
-    checkIsDentistFree(this, frm_data)
-    
-  });
+  }
+  checkIsDentistFree(this, frm_data)
+
+});
 </script>
 
-<!-- Appointment accept or deny 
-Doctor only -->
+<!-- Appointment accept or deny  -->
+  <!-- Doctor only -->
 
 
 
 
-<!-- CHANGE APPOINTMENT TIME FOR USER -->
+  <!-- CHANGE APPOINTMENT TIME FOR USER -->
