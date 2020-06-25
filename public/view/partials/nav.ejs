@@ -1,37 +1,69 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+<nav class="navbar navbar-expand-lg navbar-collapse navbar-dark bg-info">
 	<a class="navbar-brand" href="/">
 		<img src="/images/tooth.png" height="30" alt="Zub">
 		<b>Dental Care</b>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
+	aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+</button>
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="/">Pocetna</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/appointment">Zakazi termin</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/user">Korisnici</a>
-			</li>
-			<li class="nav-item rooms_list" style="display:none">
-				<a class="nav-link" href="/room">Prostorije</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/announcement">Obavestenja</a>
-			</li>
-		</ul>
-		<a role="button" class="btn btn-outline-light login_btn" href="/login">Prijavi se</a>
-		<span class="user_info nav-item" style="display: none;color:white"></span>
-		<a href="#" class="logout-btn nav-item">
-			<i class="fas fa-sign-out-alt"></i>
-		</a>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	<div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+		<a class="dropdown-item" href="#">Action</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
 	</div>
+	<ul class="navbar-nav mr-auto">
+		<li class="nav-item active">
+			<a class="nav-link" href="/">Pocetna</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/appointment">Zakazi termin</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/user">Korisnici</a>
+		</li>
+		<li class="nav-item rooms_list" style="display:none">
+			<a class="nav-link" href="/room">Prostorije</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/announcement">Obavestenja</a>
+		</li>
+		<li class="nav-item dropdown-menu">
+		</li>
+	</ul>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+		<ul class="navbar-nav ml-auto login_btn">
+			<a role="button" class="btn btn-outline-light" href="/login">Prijavi se</a>
+		</ul>
+		<ul class="navbar-nav ml-auto u-info">
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false">
+				<i class="fas fa-user"></i> Profile </a>
+				<div class="dropdown-menu dropdown-menu-right dropdown-info active" aria-labelledby="navbarDropdownMenuLink-4">
+					<button class="dropdown-item user_info" >My account</button>
+					<button 
+						class="dropdown-item"
+						style="display: flex; align-items: center;" 
+					>
+						<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+					<div class="user_role ml-2"></div>
+				</button>
+				<div class="dropdown-item" href="/logout">
+					<i class="fas fa-sign-out-alt"></i>
+					Log out
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+</div>
+
+
+
 </nav>
 <!-- Hide Login button if user is logged in -->
 <script>
@@ -43,15 +75,17 @@
 		let user = JSON.parse(localStorage.getItem('loggedIn'));
 		if (user) {
 			document.getElementsByClassName('user_info')[0].innerHTML = user.email;
+			document.getElementsByClassName('user_role')[0].innerHTML = user.role;
 		}
 	}
 	if (isAdminLoggedIn() || isDentistLoggedIn())
 		document.getElementsByClassName('rooms_list')[0].style.display = 'block';
 	
 	if(isGuest()) 
-		document.getElementsByClassName('fa-sign-out-alt')[0].style.display= 'none';
+		document.getElementsByClassName('u-info')[0].style.display= 'none';
 
 	$('.fa-sign-out-alt').click((e)=> {
+		console.log('tu si');
 		if(isUserLoggedIn()) 
 		{
 			e.preventDefault();

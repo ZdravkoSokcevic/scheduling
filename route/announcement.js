@@ -7,6 +7,7 @@ router.get('/', AnnouncementMiddleware);
 
 router.get('/', AnnouncementController.all);
 router.post('/new', AnnouncementController.insert);
+router.get('/delete', AnnouncementController.delete);
 
 
 module.exports= router;

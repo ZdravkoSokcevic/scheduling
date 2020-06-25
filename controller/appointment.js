@@ -146,3 +146,8 @@ exports.allJson= async(req,res)=> {
     let data=[];
     res.end(JSON.stringify(appointments));
 }
+
+exports.editRequest = async(req,res) => {
+    console.log(req.body);
+    res.redirect('/appointment');
+}

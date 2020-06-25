@@ -29,6 +29,19 @@ const Announcement= {
                 }else res(success);
             });
         });
+    },
+    delete: id => {
+        return new Promise((res,rej) => {
+            let query = `
+                DELETE FROM announcement
+                WHERE id = ?
+            `
+            db.query(query, [id], (err,success) => {
+                if(err)
+                    rej(err);
+                res(success);
+            })
+        })
     }
 }
 

@@ -16,8 +16,22 @@ exports.insert= async(req,res)=> {
 	res.redirect('/announcement');
 }	
 
-exports.delete= (req,res)=> {
+exports.delete= async(req,res)=> {
+	let id = req.query.id;
+	
+	if(id == null) {
+		res.redirect('/announcement');
+		return;
+	}
 
+	let success = await Announcement.delete(id).catch(e => {
+		res.redirect('/announcement')
+		return;
+	});
+	if(!success) {
+		// Session flash message
+		res.redirect('/announcement');
+	}else res.redirect('/announcement');
 }
 
 exports.update= (req,res)=> {
