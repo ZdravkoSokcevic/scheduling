@@ -34,6 +34,30 @@ exports.delete= async(req,res)=> {
 	}else res.redirect('/announcement');
 }
 
+exports.activate = async(req,res) => {
+	if(!'status' in req.query || (!'id' in req.query)) {
+		// Invalid data
+		res.redirect('/announcement');
+		return;
+	}
+
+	let id = req.query.id;
+
+	let column = await Announcement.findById(id);
+	if(column == null) {
+		res.redirect('/announcement');
+		return;
+	}
+	let status = req.query.active;
+	let success = await Announcement.updateActiveStatus(id,status);
+	if(success) {
+		// Flash message for success
+	}else {
+		// Flash message for error
+	}
+	res.redirect('/announcement');
+}
+
 exports.update= (req,res)=> {
 
 }
