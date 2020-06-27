@@ -17,13 +17,15 @@ const Announcement= {
     },
     insert:data=> {
         return new Promise((res,rej)=> {
+            if(!'active' in data)
+                data.active = 1;
             let query=`
                 INSERT INTO announcement
                     (content,active)
                 VALUES
-                    (?,1)
+                    (?,?)
             `;
-            db.query(query,data.content,(err,success)=> {
+            db.query(query,[data.content,data.active],(err,success)=> {
                 if(err) {
                     rej(err);
                 }else res(success);
