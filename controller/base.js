@@ -5,7 +5,7 @@ const Announcement= require('../model/announcement');
 
 exports.index= (req,res)=> {
     let data={};
-    Announcement.all()
+    Announcement.allActive()
         .then(data=> {
             if(req.user) {
               res.render('index.ejs',{announcements:data,loggedIn:req.user});

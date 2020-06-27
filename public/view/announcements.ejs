@@ -1,64 +1,81 @@
 <% include partials/header.ejs %>
 <% include partials/nav.ejs %>
+<% if (locals.role && locals.role == 'patient') { -%>
+	Patientic
+<% } -%>
+
+<% if (admin) { -%>
+	admin
+<% }else if(dentist) { -%>
+	dentist
+<% }else if(patient) { -%>
+	patient
+<% } -%>
+
+<%= JSON.stringify(locals.user.first_name) %>
 
 <div class="container py-5">
-  <div class="row">
-    <div class="col-xs-12 col-md-6">
-      <form action="/announcement/new" method="POST">
-        <div class="form-group">
-          <label><h5>Obavestenje</h5></label>
-          <textarea
-            class="form-control"
-            id=""
-            rows="5"
-            name="content"
-          ></textarea>
-        </div>
-        <div class="row justify-content-center">
-          <button type="submit" name="submit" class="btn btn-info">Potvrdi</button>
-        </div>
-      </form>
-    </div>
-    <div class="col-xs-12 col-md-6">
-      <% announcements.forEach(announcement => { %>
-      <div class="card mb-4">
-        <div class="activate row no-gutters">
-          <form action="/announcements/activate" method="POST">
-            <input type="text" name="id" value="<%=announcement.id%>" hidden />
-            <input
-              type="text"
-              name="active"
-              value="<% if(announcement.active==1) { %> 0 <% } else {%> 1 <% } %>"
-              hidden
-            />
-            <button
-              type="submit"
-              title="Prikazi na pocetnoj stranici"
-              class="btn btn-light <%if(announcement.active==1){%> text-warning <%}else{%> text-dark <%}%>"
-            >
-              <i class="fas fa-star"></i>
-            </button>
-          </form>
-          <form action="/announcement/delete" method="GET">
-            <input type="text" name="id" value="<%=announcement.id%>" hidden />
-            <button
-              type="submit"
-              title="Obrisi obavestenje"
-              class="btn btn-light text-danger"
-            >
-              <i class="fa fa-times"></i>
-            </button>
-          </form>
-        </div>
-        <div class="card-body">
-          <div class="card-text">
-            <%= announcement.content %>
-          </div>
-        </div>
-      </div>
-      <% }) %>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-xs-12 col-md-6">
+			<form action="/announcement/new" method="POST">
+				<div class="form-group">
+					<label><h5>Obavestenje</h5></label>
+					<textarea
+					class="form-control"
+					id=""
+					rows="5"
+					name="content"
+					></textarea>
+				</div>
+				<div class="row justify-content-center">
+					<button type="submit" name="submit" class="btn btn-info">Potvrdi</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<% announcements.forEach(announcement => { %>
+				<div class="card mb-4">
+					<div class="activate row no-gutters">
+						<form action="/announcement/activate" method="GET">
+							<input type="text" name="id" value="<%=announcement.id%>" hidden />
+							<input
+								type="text"
+								name="active"
+								value="<% if(announcement.active==1) { %>0<% } else {%>1<% } %>"
+								hidden
+							/>
+							<button
+								type="submit"
+								title="Prikazi na pocetnoj stranici"
+								class="btn btn-light <%if(announcement.active==1){%> text-warning <%}else{%> text-dark <%}%>"
+							>
+							<% if (announcement.active == 1) { -%>
+								<i class="fas fa-star"></i>
+							<% } else { -%>
+								<i class="fas fa-star" style="color:#d3d3d3"></i>
+							<% } -%>
+							</button>
+						</form>
+						<form action="/announcement/delete" method="GET">
+							<input type="text" name="id" value="<%=announcement.id%>" hidden />
+							<button
+							type="submit"
+							title="Obrisi obavestenje"
+							class="btn btn-light text-danger"
+							>
+								<i class="fa fa-times"></i>
+							</button>
+						</form>
+					</div>
+					<div class="card-body">
+						<div class="card-text">
+							<%= announcement.content %>
+						</div>
+					</div>
+				</div>
+			<% }) %>
+		</div>
+	</div>
 </div>
 
 <% include partials/scripts.ejs %>

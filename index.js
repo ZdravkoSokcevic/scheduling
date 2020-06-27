@@ -31,6 +31,8 @@ const flash= require('express-flash');
 
 const SessionMiddleware= require('./middleware/session');
 
+const GlobalMiddleware = require('./middleware/global');
+
 jwt();
 
 app.use(bodyParser());
@@ -59,6 +61,8 @@ let sess= session(sesss);
 app.use(cookieParser());
 app.use(sess);
 app.use(flash());
+
+app.use('/', GlobalMiddleware);
 
 app.use('/', BaseRouter);
 app.get('/', SessionMiddleware);
