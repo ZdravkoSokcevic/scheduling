@@ -1,5 +1,6 @@
 const mysql= require('mysql');
-const env= require('custom-env').env('dev');
+if (process.env.NODE_ENV !== 'production') 
+	require('custom-env').env('dev');
 
 let connString={
   host: process.env.DB_HOST,

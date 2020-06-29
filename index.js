@@ -17,7 +17,8 @@ const TestRouter= require('./route/test');
 
 const AnnouncementRouter= require('./route/announcement');
 
-const env = require('custom-env').env();
+if (process.env.NODE_ENV !== 'production') 
+	require('dotenv').config();
 
 const jwt= require('./helper/jwt');
 
