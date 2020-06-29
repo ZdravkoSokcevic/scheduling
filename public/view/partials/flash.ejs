@@ -1,0 +1,15 @@
+<link rel="stylesheet" type="text/css" href="/bootstrap-notify/bootstrap-notify.min.css">
+
+<%= JSON.stringify(locals)%>
+
+<% if (locals.message) { -%>
+<script type="text/javascript">
+	console.log('flashh')
+</script>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%- locals.message %>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+<% } -%>
+
+<script src="/bootstrap-notify/bootstrap-notify.min.js"></script>

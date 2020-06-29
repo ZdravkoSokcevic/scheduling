@@ -26,5 +26,9 @@ session-storage v1.0.1
 custom-env v1.0.2
   https://www.npmjs.com/package/custom-env
 
+*** Frontend ***
+bootstrap-datetimepicker
+  https://github.com/smalot/bootstrap-datetimepicker.git
+
 
   disable ssl certificates: -npm config set strict-ssl false
