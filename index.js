@@ -79,7 +79,11 @@ app.set('view-engine','ejs');
 // Access static files from public folder
 app.set('views',path.join(__dirname+'/public/view/'));
 
-app.listen(process.env.PORT || 8000, process.env.APP_HOST);
+if(process.env.APP_ENV) {
+	app.listen(process.env.PORT || 8000, process.env.APP_HOST || '');
+}else {
+	app.listen(process.env.PORT || 8000);
+}
 
 let color= require('cli-color');
 console.log(color.red('App listen on port: ')+color.blue(process.env.PORT));
