@@ -79,10 +79,11 @@ app.set('view-engine','ejs');
 // Access static files from public folder
 app.set('views',path.join(__dirname+'/public/view/'));
 
-if(process.env.APP_ENV) {
-	app.listen(process.env.PORT || 8000, process.env.APP_HOST || '');
-}else {
+console.log(process.env.NODE_ENV);
+if(process.env.NODE_ENV == 'production') {
 	app.listen(process.env.PORT || 8000);
+}else {
+	app.listen(process.env.PORT || 8000, process.env.APP_HOST || '');
 }
 
 let color= require('cli-color');
