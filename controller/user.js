@@ -3,8 +3,16 @@ const UserModel = require('../model/user');
 const response = require('./response');
 const auth = require('./auth');
 
+var req;
+var res;
+
+exports.constructor = async(req,res) => {
+	this.req = req;
+	this.res = res;
+}
 
 exports.allUsers = async (req, res) => {
+	this.constructor(req,res);
 	UserModel.all().then(result => {
 		res.statusCode = 200;
 		result.forEach(element => {
@@ -19,6 +27,7 @@ exports.allUsers = async (req, res) => {
 }
 
 exports.insert = (req, res) => {
+	this.constructor(req,res);
 	let data = req.body;
 	if (data.role == 'undefined' || data.role == null) {
 		data.role = 'patient';
@@ -36,6 +45,7 @@ exports.insert = (req, res) => {
 }
 
 exports.update = (req, res) => {
+	this.constructor(req,res);
 	let data = req.body;
 	let id = req.params.id;
 	UserModel.findById(id).then(user => {
@@ -66,6 +76,7 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
+	this.constructor(req,res);
 	let id = req.query.id;
 	UserModel.findById(id).then(result => {
 		if (result == null) {
@@ -86,6 +97,7 @@ exports.delete = (req, res) => {
 }
 
 exports.loadById = (req, res) => {
+	this.constructor(req,res);
 	let id = req.params.id;
 	UserModel.findById(id).then(user => {
 		res.header({ 'Content-Type': 'application/json' });
@@ -107,6 +119,7 @@ exports.loadById = (req, res) => {
  * Doctor only
  */
 exports.schedule = (req, res) => {
+	this.constructor(req,res);
 	id = req.params.id;
 	res.header({ 'Content-Type': 'application/json' });
 	if (id == null) {
@@ -133,6 +146,7 @@ exports.schedule = (req, res) => {
 }
 
 exports.getAll = async(req, res) => {
+	this.constructor(req,res);
 	let data = req.query;
 	let user = await auth.getUser(req, res);
 	if(user==null)
@@ -169,6 +183,7 @@ exports.getAll = async(req, res) => {
 }
 
 exports.loadEditView = (req, res) => {
+	this.constructor(req,res);
 	let id = req.params.id;
 	if (id == null || id == undefined) {
 		res.render('login.ejs');
@@ -181,6 +196,26 @@ exports.loadEditView = (req, res) => {
 			}
 		});
 	}
+}
+
+exports.view = async(req,res) => {
+	this.constructor(req,res);
+	let id = req.params.id;
+	if(id == null)
+		return this.notFoundRedirect();
+
+	let user = await UserModel.findById(id);
+	if(user == null)
+		return this.notFoundRedirect();
+
+	res.render('users/view.ejs', {user:user});
+}
+
+exports.notFoundRedirect = () => {
+	this.req.flash('message', 'Korisnik nije pronadjen');
+	this.req.flash('code', 'error');
+	this.res.redirect('/user');
+	return;
 }
 
 exports.newUserView = (req, res) => {

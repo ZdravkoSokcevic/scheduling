@@ -78,7 +78,12 @@ app.use('/test', TestRouter);
 
 app.set('view-engine','ejs');
 // Access static files from public folder
-app.set('views',path.join(__dirname+'/public/view/'));
+let viewsPath = [
+	path.join(__dirname + '/public/view'),
+	path.join(__dirname + '/public/view/room'),
+	path.join(__dirname + '/public/view/partials')
+];
+app.set('views',viewsPath);
 
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV == 'production') {

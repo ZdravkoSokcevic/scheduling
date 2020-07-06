@@ -1,24 +1,5 @@
 <% include partials/header.ejs %>
 <% include partials/nav.ejs %>
-<% if (locals.role && locals.role == 'patient') { -%>
-	Patientic
-<% } -%>
-
-<% if (admin) { -%>
-	admin
-<% }else if(dentist) { -%>
-	dentist
-<% }else if(patient) { -%>
-	patient
-<% } -%>
-<% if (locals.user) { -%>
-	<%= JSON.stringify(locals.user.first_name) %>
-	
-<% } -%>
-
-<% if(locals.message != undefined ) { %>
-	<%- locals.message %>
-<%}%>
 
 <div class="container py-5">
 	<div class="row">

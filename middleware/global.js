@@ -2,6 +2,9 @@ const router = require('express').Router();
 const Auth= require('../controller/auth');
 
 router.use('/', async(req,res,next) => {
+
+	router.handleFlashMessages(req,res);
+	
 	let user = await Auth.getUser(req,res);
 	let isAdmin = false;
 	let isPatient = false;
@@ -29,5 +32,15 @@ router.use('/', async(req,res,next) => {
 	res.locals.dentist = isDentist;
 	next();
 })
+
+router.handleFlashMessages = (req,res) => {
+	// Handle flash messages 
+	// when we use res.redirect()
+	
+	let flash = req.flash();
+	for(let message in flash) {
+		res.locals[message] = flash[message];
+	}
+}
 
 module.exports = router;

@@ -1,145 +1,146 @@
 <% include partials/header.ejs %> <% include partials/nav.ejs %>
 
-<% if(typeof locals.loggedIn===undefined) { %>
+<!-- <% if(typeof locals.loggedIn===undefined) { %>
   <script>
-    if(localStorage.getItem("loggedIn") !== null)
-      localStorage.removeItem('loggedIn');
+	if(localStorage.getItem("loggedIn") !== null)
+	  localStorage.removeItem('loggedIn');
   </script>
-<% } %>
+  <% } %> -->
 
-<section id="carousel" class="carousel">
-  <div class="overlay">
-    <h1 class="text-center">Zagarantovan savrsen osmeh!</h1>
-    <a role="button" href="/appointment" class="btn btn-warning"
-      >Zakazi termin</a
-    >
-  </div>
-</section>
+  <section id="carousel" class="carousel">
+  	<div class="overlay">
+  		<h1 class="text-center">Zagarantovan savrsen osmeh!</h1>
+  		<a role="button" href="/appointment" class="btn btn-warning"
+  		>Zakazi termin</a
+  		>
+  	</div>
+  </section>
 
-<section>
-  <div class="container pt-5">
-    <div class="row align-items-center">
-      <div class="col-xs-12 col-md-12">
-        <h3>Obavestenja</h3>
+  <section>
+  	<div class="container pt-5">
+  		<div class="row align-items-center">
+  			<div class="col-xs-12 col-md-12">
+  				<h3>Obavestenja</h3>
 
-        <% announcements.forEach(announcement => { %>
-        <div class="card my-3">
-          <div class="card-body">
-            <div class="card-text">
-              <%=announcement.content%>
-            </div>
-          </div>
-        </div>
-        <% }) %>
-      </div>
-    </div>
-  </div>
-</section>
+  				<% announcements.forEach(announcement => { %>
+  				<div class="card my-3">
+  					<div class="card-body">
+  						<div class="card-text">
+  							<%=announcement.content%>
+  						</div>
+  					</div>
+  				</div>
+  				<% }) %>
+  			</div>
+  		</div>
+  	</div>
+  </section>
 
-<section>
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-xs-12 col-md-6">
-        <h3>O nama</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui
-          vivamus arcu felis bibendum ut tristique et egestas quis. Varius quam
-          quisque id diam vel quam elementum pulvinar etiam. Tempor commodo
-          ullamcorper a lacus vestibulum sed. Ornare arcu dui vivamus arcu
-          felis. Id leo in vitae turpis massa sed elementum. Velit sed
-          ullamcorper morbi tincidunt ornare massa eget. Elit pellentesque
-          habitant morbi tristique senectus et netus. Accumsan lacus vel
-          facilisis volutpat est velit. Malesuada nunc vel risus commodo. Mattis
-          enim ut tellus elementum sagittis vitae et. Proin sagittis nisl
-          rhoncus mattis. Id faucibus nisl tincidunt eget nullam non nisi est.
-          Dignissim sodales ut eu sem integer vitae justo.
-        </p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div class="row align-items-center my-5">
-          <div
-            class="avatar"
-            style="background-image: url(/images/dentist1.jpeg);"
-          ></div>
-          <div class="col">
-            <h5>Dr Jasmina Jankovic</h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
-          </div>
-        </div>
-        <div class="row align-items-center my-5">
-          <div
-            class="avatar"
-            style="background-image: url(/images/dentist2.jpeg);"
-          ></div>
-          <div class="col">
-            <h5>Dr Milan Petrovic</h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
-          </div>
-        </div>
-        <div class="row align-items-center my-5">
-          <div
-            class="avatar"
-            style="background-image: url(/images/dentist3.jpeg);"
-          ></div>
-          <div class="col">
-            <h5>Dr Danijela Simic</h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <section>
+  	<div class="container">
+  		<div class="row align-items-center">
+  			<div class="col-xs-12 col-md-6">
+  				<h3>O nama</h3>
+  				<p>
+  					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+  					eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui
+  					vivamus arcu felis bibendum ut tristique et egestas quis. Varius quam
+  					quisque id diam vel quam elementum pulvinar etiam. Tempor commodo
+  					ullamcorper a lacus vestibulum sed. Ornare arcu dui vivamus arcu
+  					felis. Id leo in vitae turpis massa sed elementum. Velit sed
+  					ullamcorper morbi tincidunt ornare massa eget. Elit pellentesque
+  					habitant morbi tristique senectus et netus. Accumsan lacus vel
+  					facilisis volutpat est velit. Malesuada nunc vel risus commodo. Mattis
+  					enim ut tellus elementum sagittis vitae et. Proin sagittis nisl
+  					rhoncus mattis. Id faucibus nisl tincidunt eget nullam non nisi est.
+  					Dignissim sodales ut eu sem integer vitae justo.
+  				</p>
+  			</div>
+  			<div class="col-xs-12 col-md-6">
+  				<div class="row align-items-center my-5">
+  					<div
+  					class="avatar"
+  					style="background-image: url(/images/dentist1.jpeg);"
+  					></div>
+  					<div class="col">
+  						<h5>Dr Jasmina Jankovic</h5>
+  						<p>
+  							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  						</p>
+  					</div>
+  				</div>
+  				<div class="row align-items-center my-5">
+  					<div
+  					class="avatar"
+  					style="background-image: url(/images/dentist2.jpeg);"
+  					></div>
+  					<div class="col">
+  						<h5>Dr Milan Petrovic</h5>
+  						<p>
+  							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  						</p>
+  					</div>
+  				</div>
+  				<div class="row align-items-center my-5">
+  					<div
+  					class="avatar"
+  					style="background-image: url(/images/dentist3.jpeg);"
+  					></div>
+  					<div class="col">
+  						<h5>Dr Danijela Simic</h5>
+  						<p>
+  							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  						</p>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
 
-<section class="bg-info text-light">
-  <div class="container py-5">
-    <div class="row align-items-center">
-      <div class="col-xs-12 col-md-6">
-        <h3>Kontakt</h3>
-        <table class="table table-borderless table-sm text-light">
-          <tbody>
-            <tr>
-              <td class="px-0">Adresa</td>
-              <td>10 W. Lancaster Dr. Victoria, TX 77904</td>
-            </tr>
-            <tr>
-              <td class="px-0">Telefon</td>
-              <td>+1-202-555-0141</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div id="map"></div>
-      </div>
-    </div>
-  </div>
-</section>
+  <section class="bg-info text-light">
+  	<div class="container py-5">
+  		<div class="row align-items-center">
+  			<div class="col-xs-12 col-md-6">
+  				<h3>Kontakt</h3>
+  				<table class="table table-borderless table-sm text-light">
+  					<tbody>
+  						<tr>
+  							<td class="px-0">Adresa</td>
+  							<td>10 W. Lancaster Dr. Victoria, TX 77904</td>
+  						</tr>
+  						<tr>
+  							<td class="px-0">Telefon</td>
+  							<td>+1-202-555-0141</td>
+  						</tr>
+  					</tbody>
+  				</table>
+  			</div>
+  			<div class="col-xs-12 col-md-6">
+  				<div id="map"></div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
 
-<% include partials/scripts.ejs %>
-<script src="/javascripts/home.js"></script>
+  <% include partials/scripts.ejs %>
+  <script src="/javascripts/home.js"></script>
 
-<script>
-  var map;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 8
-    });
-  }
-</script>
+  <script>
+  	var map;
+  	function initMap() {
+  		map = new google.maps.Map(document.getElementById("map"), {
+  			center: { lat: -34.397, lng: 150.644 },
+  			zoom: 8
+  		});
+  		
+  	}
+  </script>
 
-<script
+  <script
   async
   defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgD74a-jbRnIja5JtkjrJd1iyH2jTpjOM&callback=initMap"
   type="text/javascript"
-></script>
-<% include partials/footer.ejs %>
+  ></script>
+  <% include partials/footer.ejs %>

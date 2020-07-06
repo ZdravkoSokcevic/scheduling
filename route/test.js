@@ -15,5 +15,6 @@ router.get('/special', TestController.loggedIn);
 router.post('/special', TestController.loggedIn);
 
 router.get('/async', TestController.async);
+router.get('/log', TestController.testLog);
 
 module.exports= router;

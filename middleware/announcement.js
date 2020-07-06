@@ -1,17 +1,22 @@
 const router= require('express').Router();
 const User= require('../controller/auth');
 
+// Handle flash messages
+router.use('/', (req,res,next) => {
+	
+	next();
+})
 // Change activation status (admin only)
 router.use('/activate', async(req,res,next) => {
-	let user = await User.getUser();
-	
+	let user = await User.getUser(req,res);
+	console.log('User: ');
+	console.log(user);
 	if(user == false || user == null || (user.role && user.role != 'admin')) {
 		// Session flash not allowed
 		console.log('flash message');
 
-		res.locals.code = 404;
-		res.locals.message = 'Nije dozvoljeno!';
-		console.log(res.locals);
+		req.flash('code', 404);
+		req.flash('message', 'Nije dozvoljeno!');
 		res.redirect('/announcement');
 		return;
 	}

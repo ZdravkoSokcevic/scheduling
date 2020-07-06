@@ -1,10 +1,13 @@
 <link rel="stylesheet" type="text/css" href="/bootstrap-notify/bootstrap-notify.min.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/flash.css">
 
-<%= JSON.stringify(locals)%>
+<script type="text/javascript">
+	let locals = '<%- JSON.stringify(locals.messages) %>';
+	console.log(JSON.parse(locals));
+</script>
 
 <% if (locals.message) { -%>
 <script type="text/javascript">
-	console.log('flashh')
 </script>
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
     <%- locals.message %>

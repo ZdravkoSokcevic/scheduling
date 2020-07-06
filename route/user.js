@@ -13,6 +13,7 @@ router.get('/new', UserController.newUserView);
 router.post('/new', UserController.insert);
 router.get('/edit/:id', UserController.loadEditView);
 router.post('/edit/:id', UserController.update);
+router.get('/view/:id', UserController.view);
 router.get('/delete', UserController.delete);
 
 router.post('/work_time', UserController.updateOrCreateWorkingTime );

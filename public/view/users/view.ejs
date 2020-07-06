@@ -1,0 +1,80 @@
+<% include partials/header.ejs %> <% include partials/nav.ejs %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-md-6">
+            <form action="/user" method="GET">
+                <div class="form-group">
+                    <label>Rola</label>
+                    <select required class="form-control" name="role" hidden>
+                        <option value="admin" class="roles">Administrator</option>
+                        <option value="dentist" class="roles">Stomatolog</option>
+                        <option value="patient" class="roles">Pacijent</option>
+                    </select>
+                    <input 
+                        type="text"
+                        disabled
+                        class="form-control" 
+                        id="user_role" 
+                    />
+                </div>
+                <div class="form-group">
+                    <label>Ime</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="first_name"
+                        value="<%- user.first_name %>"
+                        disabled 
+                    />
+                </div>
+                <div class="form-group">
+                    <label>Prezime</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="last_name"
+                        value="<%- user.last_name %>"
+                        disabled 
+                    />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input 
+                        required 
+                        type="email" 
+                        class="form-control" 
+                        name="email"
+                        value="<%- user.email %>" 
+                        disabled
+                    />
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="phone"
+                        value="<%- user.phone %>"
+                        disabled 
+                    />
+                </div>
+                <div class="row" style="display: block; text-align: right;">
+                    <a role="button" href="/user" class="btn btn-light">Nazad</a>
+                    <!-- <button type="submit" class="btn btn-info">Potvrdi</button> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var role = "<%- user.role %>";
+    let roleInputs = document.querySelectorAll('.roles');
+    roleInputs.forEach(roleInput => {
+        if(roleInput.value == role)
+            document.getElementById('user_role').value = roleInput.innerHTML;
+    })
+</script>
+
+<% include partials/scripts.ejs %>

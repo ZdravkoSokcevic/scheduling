@@ -141,12 +141,15 @@ exports.login= async(req,res)=> {
         res.redirect('/login');
     else {
         let user= await User.findOne('email', data.email);
-        if(typeof user=='undefined' || !user)
+        if(typeof user=='undefined' || !user) {
+            req.flash('code',404);
+            req.flash('message','Pogresno korisnicko ime ili lozinka');
             res.redirect('/login');
+        }
         else {
             let match= await bcrypt.compare(data.password, user.password);
             if(!match) {
-                req.flash('code',200);
+                req.flash('code',404);
                 req.flash('message','Pogresno korisnicko ime ili lozinka');
                 res.redirect('/login');
             }
