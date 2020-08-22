@@ -1,14 +1,5 @@
 var Globals= {};
-let global_time_events=[{
-    start: '2020-02-02T12:00',
-    end: '2020-02-02T15:00',
-    color:'red'
-  },
-  {
-    start: '2020-02-02T14:00',
-    end: '2020-02-02T17:00',
-    color: 'yellow'
-}];
+let global_time_events=[];
 let currentView='month';
 
 let show_form=(calendar,date)=> {
@@ -19,7 +10,7 @@ let show_form=(calendar,date)=> {
   | Depends of user role show different modals
   |------------------------------------------------
   */
-
+  console.log('tu si');
   //  ToDo validate form on loading
   //  and disable buttons
   if(isAdminLoggedIn()) {
@@ -76,16 +67,22 @@ let addData= (calendar=false)=> {
   all_ev.forEach(appointment=> {
     let object={
         id: appointment.id,
-        title: 'afgdsag', //moment(appointment.date_from).format(Globals.TIME_FORMAT),
+        title: appointment.title, //moment(appointment.date_from).format(Globals.TIME_FORMAT),
         start: moment(appointment.date_from).format(Globals.GOOD_FORMAT),
         end: moment(appointment.date_to).format(Globals.GOOD_FORMAT),
+        from: appointment.date_from,
+        to: appointment.date_to,
         color:'blue',
         eventColor:'blue',
+        dentist_id: appointment.dentist_id,
         user_id: appointment.user_id,
         user_role: appointment.user_role,
         displayEventTime: false,
         status: appointment.status
     }
+    if(user.id == object.dentist_id)
+      object.borderColor = 'red';
+    console.log(object.dentist_id);
     switch(user.role)
     {
       case 'admin':
@@ -215,17 +212,18 @@ document.addEventListener("DOMContentLoaded", function() {
     ///////////////////////////////////////////////////////
     // Event click not working here, documentation failed
     ///////////////////////////////////////////////////////
-    // eventClick: (element, jsEvent, view)=> {
-    //   console.log(view);
-    //   if(isDentistLoggedIn())
-    //   {
-    //   }else if(isUserLoggedIn()) {
+    eventClick: (element, jsEvent, view)=> {
+      // console.log(element.event);
+      if(isDentistLoggedIn())
+      {
+        showDentistModal(element.event);
+      }else if(isUserLoggedIn()) {
 
-    //   }else {
-    //     //guest, redirect to login
-    //     window.location.href='/login';
-    //   }
-    // }
+      }else {
+        //guest, redirect to login
+        window.location.href='/login';
+      }
+    }
   }
 
   if(isGuest()) {
@@ -247,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let loggedIn= getUser();
     if(loggedIn== null)
       return;
-    
+
     if(loggedIn.role == 'patient') {
       if(loggedIn.id != eventInfo.user_id)
         return;
@@ -284,7 +282,8 @@ window.onload= ()=> {
   Globals.userEditTimeTo= $('#user_appointment_edit_date_to');
 
   Globals.appointmentButton= $('#appointment_btn');
-  Globals.dentistModal= $('#dentist_modal');
+  Globals.dentistModal = $('#dentist_confirm');
+  Globals.dentistConfirmForm= document.forms['dentist_confirm'];
 
   Globals.adminWorkingTimeModal= $();
   Globals.adminWorkingTimeModalForm= $();
@@ -311,6 +310,28 @@ let showUserEditModal= event => {
   Globals.userAppointmentEditModal.modal('show');
   let time_from= moment(event.start);
   Globals.userEditTimeFromVisible.val(time_from.format(Globals.INVERT_FORMAT));
-
   
+}
+
+const showDentistModal = (element) => {
+  // Custom props element.extendedProps
+  console.log(element);
+  if(loggedIn.id == element.extendedProps.dentist_id) {
+    console.log(Globals.dentistConfirmForm);
+    console.log(element.extendedProps.from);
+    Globals.dentistConfirmForm.from.value = moment(element.extendedProps.from).format(Globals.INVERT_FORMAT);
+    Globals.dentistConfirmForm.to.value = moment(element.extendedProps.to).format(Globals.INVERT_FORMAT);
+    $(Globals.dentistConfirmForm).find('.appointment_user').html(element.title);
+    Globals.dentistConfirmForm.appointment_id.value = element.id;
+    Globals.dentistConfirmForm.addEventListener('submit', e => {
+      console.log('tu si');
+      e.preventDefault();
+      e.stopPropagation();
+    })
+    Globals.dentistModal.trigger('focus');
+    Globals.dentistModal.modal('show');
+  }
+  console.log('Element');
+  
+  console.log(element);
 }

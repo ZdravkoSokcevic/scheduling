@@ -35,14 +35,17 @@
 			date_to: '<%- appointment.date_to %>',
 			status: '<%- appointment.status %>',
 			user_id: '<%- appointment.user_id %>',
+			dentist_id: '<%- appointment.dentist_id %>',
 			user_role: '<%- appointment.user_role %>',
 			doctor_fname: '<%- appointment.doctor_fname %>',
 			doctor_lname: '<%- appointment.doctor_lname %>',
 			doctor_role: '<%- appointment.doctor_role %>',
 			doctor_phone: '<%- appointment.doctor_phone %>',
 			doctor_email: '<%- appointment.doctor_email %>',
+			title: '<%- appointment.user_fname%>' + ' ' + '<%- appointment.user_lname%>',
 			color: 'blue'
 		};
+		single.color='red';
 		all_ev.push(single);
 	</script>
 <% }); %>
