@@ -87,7 +87,7 @@ app.set('views',viewsPath);
 
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV == 'production') {
-	app.listen(process.env.PORT || 8000);
+	app.listen(process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8000, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 }else {
 	app.listen(process.env.PORT || 8000, process.env.APP_HOST || '');
 }
