@@ -32,3 +32,5 @@ bootstrap-datetimepicker
 
 
   disable ssl certificates: -npm config set strict-ssl false
+
+## Docs is moved to [<b style="color:red">`Go To docs`</b>](https://github.com/ZdravkoSokcevic/Scheduling_Docs)

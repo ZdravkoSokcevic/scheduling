@@ -12,3 +12,5 @@
  *  run command <b>npm run nodemon</b> to run app with nodemon daemon to watch changes in project without restarting server
  * run command <b style="color:red">npm start</b> to start app
  * default environment contains db connection is stored in <b style="color:red">dev.env</b> file in root of folder
+
+ ## Docs is moved to [<b style="color:red">`Go To docs`</b>](https://github.com/ZdravkoSokcevic/Scheduling_Docs)
